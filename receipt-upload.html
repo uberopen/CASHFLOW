@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Submit Receipt · CashFlow Smart</title>
+<link rel="icon" type="image/png" href="assets/favicon_cashflow.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy0: #0A0F1C; --navy1: #0F1629; --navy2: #141D35; --navy3: #1A2540;
+    --line: #1E2D4A; --ink: #F0F4FF; --inkDim: #9BAAC8; --inkMute: #5C6B8A;
+    --amber: #F6B54A; --orange: #EA580C; --green: #3EE6A8; --blue: #3D7BFF;
+  }
+  html, body { min-height: 100%; background: var(--navy0); font-family: 'Manrope', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+  .page { max-width: 480px; margin: 0 auto; padding: 24px 20px env(safe-area-inset-bottom, 24px); }
+
+  /* Header */
+  .header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+  .header img { height: 36px; object-fit: contain; }
+  .header-title { font-size: 11px; color: var(--inkMute); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+
+  /* Title block */
+  .title-block { margin-bottom: 24px; }
+  .title-block h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); line-height: 1.2; }
+  .title-block p  { font-size: 13px; color: var(--inkMute); margin-top: 6px; line-height: 1.5; }
+
+  /* Upload zone */
+  .upload-zone {
+    border: 2px dashed var(--line); border-radius: 16px;
+    background: var(--navy2); padding: 36px 24px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; cursor: pointer; transition: all 0.2s; margin-bottom: 24px;
+    position: relative; overflow: hidden;
+  }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--amber); background: rgba(246,181,74,0.04); }
+  .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .upload-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: rgba(246,181,74,0.1); border: 1px solid rgba(246,181,74,0.25);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .upload-icon svg { display: block; }
+  .upload-zone h3 { font-size: 14px; font-weight: 700; color: var(--ink); text-align: center; }
+  .upload-zone p  { font-size: 12px; color: var(--inkMute); text-align: center; line-height: 1.4; }
+  .upload-preview {
+    width: 100%; border-radius: 12px; max-height: 220px;
+    object-fit: cover; display: none; border: 1px solid var(--line);
+  }
+  .upload-preview.show { display: block; }
+  .upload-fname { font-size: 12px; color: var(--amber); font-weight: 600; text-align: center; display: none; }
+  .upload-fname.show { display: block; }
+
+  /* Form */
+  .form { display: flex; flex-direction: column; gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--inkMute); }
+  .field input, .field select, .field textarea {
+    background: var(--navy2); border: 1px solid var(--line); border-radius: 11px;
+    padding: 12px 14px; color: var(--ink); font-family: 'Manrope', sans-serif;
+    font-size: 14px; font-weight: 500; outline: none; width: 100%;
+    transition: border-color 0.18s, box-shadow 0.18s; appearance: none; -webkit-appearance: none;
+  }
+  .field input::placeholder, .field textarea::placeholder { color: var(--inkMute); }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: rgba(246,181,74,0.5); box-shadow: 0 0 0 3px rgba(246,181,74,0.08);
+  }
+  .field input[type=number] { font-family: 'JetBrains Mono', monospace; }
+  .field input[type=date] { color-scheme: dark; }
+  .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235C6B8A' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+  .field select option { background: var(--navy2); }
+  .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+  /* Amount prefix */
+  .amount-wrap { position: relative; }
+  .amount-wrap span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--inkMute); pointer-events: none; }
+  .amount-wrap input { padding-left: 28px; }
+
+  /* Row */
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* Submit button */
+  .btn-submit {
+    width: 100%; padding: 16px; border-radius: 13px; border: none; cursor: pointer;
+    background: linear-gradient(180deg, #F6B54A, #E07420);
+    color: #03060F; font-family: 'Manrope', sans-serif;
+    font-size: 15px; font-weight: 800; letter-spacing: 0.01em;
+    box-shadow: 0 4px 24px -6px rgba(246,181,74,0.5);
+    transition: all 0.2s; margin-top: 8px;
+  }
+  .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 32px -6px rgba(246,181,74,0.6); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+  /* Success state */
+  .success {
+    display: none; flex-direction: column; align-items: center;
+    text-align: center; gap: 16px; padding: 40px 24px;
+  }
+  .success.show { display: flex; }
+  .success-icon {
+    width: 72px; height: 72px; border-radius: 22px;
+    background: rgba(62,230,168,0.12); border: 1px solid rgba(62,230,168,0.3);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 40px -12px rgba(62,230,168,0.3);
+  }
+  .success h2 { font-size: 20px; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; }
+  .success p { font-size: 13px; color: var(--inkMute); line-height: 1.6; max-width: 300px; }
+  .btn-new {
+    padding: 12px 28px; border-radius: 11px; border: 1px solid var(--line);
+    background: transparent; color: var(--inkDim); font-family: 'Manrope', sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.18s; margin-top: 8px;
+  }
+  .btn-new:hover { background: rgba(255,255,255,0.04); color: var(--ink); }
+
+  .form-section { display: flex; flex-direction: column; gap: 16px; }
+  .form-section.hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <img src="assets/cashflow_logo.svg" alt="CashFlow Smart" />
+  </div>
+
+  <!-- Title -->
+  <div class="title-block">
+    <h1>Submit a Receipt</h1>
+    <p>Upload your receipt photo for bookkeeper review. Your submission will be matched to a bank transaction.</p>
+  </div>
+
+  <!-- Success state -->
+  <div class="success" id="success">
+    <div class="success-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3EE6A8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12l4 4L19 6"/>
+      </svg>
+    </div>
+    <h2>Receipt submitted!</h2>
+    <p>Your receipt has been received. Your bookkeeper will review it and match it to a bank transaction shortly.</p>
+    <button class="btn-new" onclick="resetForm()">Submit another receipt</button>
+  </div>
+
+  <!-- Form -->
+  <div class="form-section" id="formSection">
+
+    <!-- Upload zone -->
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" accept="image/*" capture="environment" id="fileInput" onchange="handleFile(this)" />
+      <div class="upload-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F6B54A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </div>
+      <h3>Tap to take photo or upload</h3>
+      <p>JPEG, PNG, HEIC accepted<br/>Max 20 MB</p>
+      <img class="upload-preview" id="uploadPreview" alt="Receipt preview" />
+      <span class="upload-fname" id="uploadFname"></span>
+    </div>
+
+    <!-- Form fields -->
+    <div class="form">
+      <div class="field">
+        <label>Your Name</label>
+        <input type="text" id="subName" placeholder="e.g. Marcus Rivera" autocomplete="name" />
+      </div>
+
+      <div class="field">
+        <label>Select Job</label>
+        <select id="jobSelect">
+          <option value="" disabled selected>Choose a job…</option>
+          <option>Hoosier Homes</option>
+          <option>Timberland Dr.</option>
+          <option>Live Indy</option>
+          <option>INHP Arnolda</option>
+          <option>Southeastern Property</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Amount ($)</label>
+          <div class="amount-wrap">
+            <span>$</span>
+            <input type="number" id="amount" placeholder="0.00" step="0.01" min="0" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="receiptDate" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Category</label>
+        <select id="category">
+          <option value="" disabled selected>Choose a category…</option>
+          <option>Direct Expenditure</option>
+          <option>Overhead</option>
+          <option>Tools</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Notes <span style="font-weight:500;text-transform:none;letter-spacing:0;color:#3a4a6a;">(optional)</span></label>
+        <textarea id="notes" placeholder="Any notes for the bookkeeper…"></textarea>
+      </div>
+
+      <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">Submit Receipt</button>
+    </div>
+
+  </div><!-- /formSection -->
+
+</div>
+
+<script>
+  // Set default date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('receiptDate').value = today;
+
+  // Drag-over styling
+  const zone = document.getElementById('uploadZone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('drag');
+    const file = e.dataTransfer.files[0];
+    if (file) displayFile(file);
+  });
+
+  function handleFile(input) {
+    if (input.files && input.files[0]) displayFile(input.files[0]);
+  }
+
+  function displayFile(file) {
+    const fname = document.getElementById('uploadFname');
+    const preview = document.getElementById('uploadPreview');
+    fname.textContent = file.name;
+    fname.classList.add('show');
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.src = e.target.result;
+        preview.classList.add('show');
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function handleSubmit() {
+    const name    = document.getElementById('subName').value.trim();
+    const job     = document.getElementById('jobSelect').value;
+    const amount  = document.getElementById('amount').value;
+    const date    = document.getElementById('receiptDate').value;
+    const cat     = document.getElementById('category').value;
+
+    if (!name || !job || !amount || !date || !cat) {
+      // Simple shake on required fields
+      [document.getElementById('subName'), document.getElementById('jobSelect'),
+       document.getElementById('amount'), document.getElementById('receiptDate'),
+       document.getElementById('category')].forEach(el => {
+        if (!el.value.trim()) {
+          el.style.borderColor = 'rgba(255,106,122,0.6)';
+          setTimeout(() => el.style.borderColor = '', 1800);
+        }
+      });
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+
+    // Simulate async submit
+    setTimeout(() => {
+      document.getElementById('formSection').classList.add('hidden');
+      document.getElementById('success').classList.add('show');
+    }, 900);
+  }
+
+  function resetForm() {
+    document.getElementById('formSection').classList.remove('hidden');
+    document.getElementById('success').classList.remove('show');
+    document.getElementById('subName').value = '';
+    document.getElementById('jobSelect').selectedIndex = 0;
+    document.getElementById('amount').value = '';
+    document.getElementById('receiptDate').value = today;
+    document.getElementById('category').selectedIndex = 0;
+    document.getElementById('notes').value = '';
+    document.getElementById('uploadPreview').classList.remove('show');
+    document.getElementById('uploadFname').classList.remove('show');
+    document.getElementById('fileInput').value = '';
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = false;
+    btn.textContent = 'Submit Receipt';
+  }
+</script>
+</body>
+</html>
