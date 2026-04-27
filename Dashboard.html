@@ -751,7 +751,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 }/*EDITMODE-END*/;
 
 function App() {
-  const [screen, setScreen]       = React.useState('onboarding');
+  const [screen, setScreen]       = React.useState('dashboard');
   const [collapsed, setCollapsed] = React.useState(() => {
     const saved = localStorage.getItem('cf_sidebar_collapsed');
     return saved !== null ? saved === 'true' : TWEAK_DEFAULTS.sidebarCollapsed;

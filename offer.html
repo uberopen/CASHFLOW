@@ -19,167 +19,316 @@
   --navy-0:#0A0F1C;--navy-1:#0F1629;--navy-2:#141D35;--navy-3:#1A2540;
   --navy-line:#1E2D4A;--ink:#F0F4FF;--ink-dim:#9BAAC8;--ink-mute:#5C6B8A;
   --blue:#3D7BFF;--blue-bright:#5B91FF;--cyan:#6FE8FF;--amber:#F6B54A;
-  --green:#3EE6A8;--red:#FF6A7A;--radius:12px;--radius-lg:20px;
+  --green:#3EE6A8;--red:#FF6A7A;--radius:14px;--radius-lg:22px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
   font-family:"Inter","Manrope",system-ui,sans-serif;
-  background:var(--navy-0);color:var(--ink);font-size:16px;line-height:1.6;
+  background:var(--navy-0);color:var(--ink);font-size:16px;line-height:1.65;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 .serif{font-family:"Instrument Serif",serif;font-weight:400}
 .mono{font-family:"JetBrains Mono",monospace}
-
-/* Layout */
-.wrap{max-width:900px;margin:0 auto;padding:0 24px}
+.wrap{max-width:960px;margin:0 auto;padding:0 28px}
 a{color:var(--cyan);text-decoration:none}
 a:hover{text-decoration:underline}
 
-/* Nav */
+/* ── Animations ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 20px rgba(111,232,255,0.15)}50%{box-shadow:0 0 40px rgba(111,232,255,0.3)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ── Nav ── */
 .top-bar{
-  padding:16px 0;border-bottom:1px solid var(--navy-line);
-  background:rgba(10,15,28,0.92);backdrop-filter:blur(16px);
+  padding:14px 0;
+  background:rgba(10,15,28,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   position:sticky;top:0;z-index:50;
+  border-bottom:1px solid rgba(30,45,74,0.5);
 }
 .top-bar .wrap{display:flex;align-items:center;justify-content:space-between}
 .top-bar img{height:28px}
-.back{font-size:14px;color:var(--ink-dim);text-decoration:none;display:flex;align-items:center;gap:6px}
-.back:hover{color:var(--ink)}
+.back{font-size:13px;font-weight:500;color:var(--ink-mute);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
+.back:hover{color:var(--ink);text-decoration:none}
 
-/* Hero */
-.hero{padding:64px 0 48px;text-align:center}
-.badge-row{display:flex;justify-content:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
-.badge{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
-  padding:6px 14px;border-radius:999px;
-}
-.badge-cyan{background:rgba(111,232,255,0.1);border:1px solid rgba(111,232,255,0.3);color:var(--cyan)}
-.badge-amber{background:rgba(246,181,74,0.1);border:1px solid rgba(246,181,74,0.3);color:var(--amber)}
-.hero h1{
-  font-family:"Manrope",sans-serif;font-size:clamp(32px,5vw,56px);
-  font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:20px;
-}
-.hero .sub{font-size:18px;color:var(--ink-dim);max-width:600px;margin:0 auto 36px}
-
-/* Price Hero Card */
-.price-hero{
-  background:linear-gradient(135deg,var(--navy-2),var(--navy-3));
-  border:1px solid var(--navy-line);border-radius:var(--radius-lg);
-  padding:40px;text-align:center;max-width:480px;margin:0 auto 56px;
+/* ── Hero ── */
+.hero{
+  padding:80px 0 0;text-align:center;
   position:relative;overflow:hidden;
 }
-.price-hero::before{
-  content:"";position:absolute;top:-1px;left:20%;right:20%;height:2px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+.hero::before{
+  content:"";position:absolute;top:-200px;left:50%;transform:translateX(-50%);
+  width:800px;height:800px;border-radius:50%;
+  background:radial-gradient(circle,rgba(61,123,255,0.08) 0%,transparent 70%);
+  pointer-events:none;
 }
-.price-hero .label{
-  font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;
-  color:var(--cyan);margin-bottom:4px;
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  padding:8px 18px;border-radius:999px;
+  background:rgba(111,232,255,0.08);border:1px solid rgba(111,232,255,0.2);
+  color:var(--cyan);margin-bottom:28px;
 }
-.price-hero .spots{font-size:13px;color:var(--amber);font-weight:600;margin-bottom:20px}
-.price-hero .amount{font-size:72px;font-weight:800;letter-spacing:-0.04em;line-height:1}
-.price-hero .amount .dollar{font-size:36px;vertical-align:super;color:var(--ink-dim)}
-.price-hero .per{font-size:16px;color:var(--ink-dim);margin-top:4px}
-.price-hero .note{font-size:13px;color:var(--ink-mute);margin-top:16px;line-height:1.5}
+.hero-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:pulse-glow 2s infinite}
+.hero h1{
+  font-family:"Manrope",sans-serif;font-size:clamp(34px,5.5vw,60px);
+  font-weight:800;letter-spacing:-0.035em;line-height:1.08;margin-bottom:20px;
+}
+.hero h1 .highlight{
+  background:linear-gradient(135deg,var(--cyan),var(--blue-bright));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero .sub{font-size:17px;color:var(--ink-dim);max-width:540px;margin:0 auto 0;line-height:1.7}
+
+/* ── Price Card ── */
+.price-section{padding:48px 0 64px;display:flex;justify-content:center}
+.price-card{
+  width:100%;max-width:440px;
+  background:linear-gradient(165deg,rgba(20,29,53,0.9),rgba(26,37,64,0.95));
+  border:1px solid rgba(111,232,255,0.15);border-radius:24px;
+  padding:44px 36px 40px;text-align:center;
+  position:relative;overflow:hidden;
+  animation:pulse-glow 3s infinite;
+}
+.price-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent 5%,var(--cyan) 30%,var(--blue) 70%,transparent 95%);
+}
+.price-card::after{
+  content:"";position:absolute;bottom:-60px;right:-60px;width:200px;height:200px;
+  border-radius:50%;background:radial-gradient(circle,rgba(61,123,255,0.1),transparent 70%);
+  pointer-events:none;
+}
+.price-label{
+  display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--navy-0);background:var(--cyan);padding:5px 14px;border-radius:6px;margin-bottom:16px;
+}
+.price-spots{
+  font-size:13px;font-weight:600;color:var(--amber);margin-bottom:24px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.price-spots .live-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse-glow 1.5s infinite}
+.price-amount{font-size:80px;font-weight:800;letter-spacing:-0.05em;line-height:1;margin-bottom:4px}
+.price-amount .dollar{font-size:32px;vertical-align:top;margin-right:2px;color:var(--ink-dim);font-weight:600}
+.price-per{font-size:15px;color:var(--ink-dim);margin-bottom:20px}
+.price-divider{width:60px;height:1px;background:var(--navy-line);margin:0 auto 20px}
+
+.price-includes{text-align:left;margin-bottom:28px}
+.price-includes li{
+  list-style:none;font-size:14px;color:var(--ink-dim);padding:7px 0;
+  display:flex;align-items:center;gap:10px;
+}
+.price-includes li svg{flex-shrink:0;color:var(--green)}
+.price-note{font-size:12px;color:var(--ink-mute);line-height:1.6;margin-top:20px}
 
 .cta-btn{
-  display:inline-flex;align-items:center;gap:10px;
-  padding:16px 36px;border-radius:14px;font-weight:700;font-size:17px;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;
+  padding:16px 32px;border-radius:14px;font-weight:700;font-size:16px;
   background:linear-gradient(180deg,#4D87FF 0%,#2F68EE 100%);color:#fff;
-  border:none;cursor:pointer;text-decoration:none;margin-top:24px;
-  box-shadow:0 12px 36px -8px rgba(61,123,255,0.7),inset 0 1px 0 rgba(255,255,255,0.25);
+  border:none;cursor:pointer;text-decoration:none;
+  box-shadow:0 12px 40px -8px rgba(61,123,255,0.6),inset 0 1px 0 rgba(255,255,255,0.2);
   transition:transform .2s,box-shadow .2s;
+  position:relative;overflow:hidden;
 }
-.cta-btn:hover{transform:translateY(-2px);box-shadow:0 18px 44px -8px rgba(61,123,255,0.9),inset 0 1px 0 rgba(255,255,255,0.25);text-decoration:none}
+.cta-btn::before{
+  content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);
+  animation:shimmer 3s infinite;
+}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 18px 50px -8px rgba(61,123,255,0.8),inset 0 1px 0 rgba(255,255,255,0.25);text-decoration:none}
 
-/* Sections */
-.section{padding:48px 0}
-.section + .section{border-top:1px solid var(--navy-line)}
+/* ── Sections ── */
+.section{padding:64px 0}
+.section + .section{border-top:1px solid rgba(30,45,74,0.4)}
+.section-label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--ink-mute);margin-bottom:14px;
+}
+.section-label .bar{width:20px;height:2px;background:var(--blue);border-radius:2px}
 .section h2{
-  font-family:"Manrope",sans-serif;font-size:clamp(24px,3.5vw,36px);
-  font-weight:700;letter-spacing:-0.02em;margin-bottom:24px;line-height:1.15;
+  font-family:"Manrope",sans-serif;font-size:clamp(26px,4vw,40px);
+  font-weight:800;letter-spacing:-0.025em;margin-bottom:12px;line-height:1.12;
 }
-.section h3{font-size:18px;font-weight:700;margin-bottom:6px;color:var(--ink)}
+.section .section-sub{font-size:15px;color:var(--ink-dim);max-width:560px;margin-bottom:32px;line-height:1.7}
 
-/* Feature Grid */
-.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+/* ── Feature Grid ── */
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:640px){.feat-grid{grid-template-columns:1fr}}
 .feat{
-  background:var(--navy-1);border:1px solid var(--navy-line);border-radius:var(--radius);
-  padding:24px;
+  background:linear-gradient(160deg,var(--navy-1),var(--navy-2));
+  border:1px solid var(--navy-line);border-radius:16px;
+  padding:28px 24px;transition:border-color .3s,transform .3s;
 }
-.feat .icon{
-  width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;
-  font-size:20px;margin-bottom:14px;
+.feat:hover{border-color:rgba(61,123,255,0.3);transform:translateY(-2px)}
+.feat-icon{
+  width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;font-size:18px;font-weight:800;
 }
-.feat .icon.blue{background:rgba(61,123,255,0.12);color:var(--blue-bright)}
-.feat .icon.cyan{background:rgba(111,232,255,0.1);color:var(--cyan)}
-.feat .icon.green{background:rgba(62,230,168,0.1);color:var(--green)}
-.feat .icon.amber{background:rgba(246,181,74,0.1);color:var(--amber)}
-.feat p{font-size:14px;color:var(--ink-dim);line-height:1.55}
+.feat-icon.blue{background:rgba(61,123,255,0.1);border:1px solid rgba(61,123,255,0.15);color:var(--blue-bright)}
+.feat-icon.cyan{background:rgba(111,232,255,0.08);border:1px solid rgba(111,232,255,0.15);color:var(--cyan)}
+.feat-icon.green{background:rgba(62,230,168,0.08);border:1px solid rgba(62,230,168,0.15);color:var(--green)}
+.feat-icon.amber{background:rgba(246,181,74,0.08);border:1px solid rgba(246,181,74,0.15);color:var(--amber)}
+.feat h3{font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-0.01em}
+.feat p{font-size:13.5px;color:var(--ink-dim);line-height:1.6}
 
-/* Bookkeeping Detail */
-.bk-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+/* ── Bookkeeping ── */
+.bk-hero{
+  background:linear-gradient(160deg,rgba(62,230,168,0.04),rgba(61,123,255,0.04));
+  border:1px solid rgba(62,230,168,0.12);border-radius:20px;
+  padding:36px 32px;margin-bottom:24px;
+}
+.bk-hero h3{font-size:20px;font-weight:700;margin-bottom:6px}
+.bk-hero .rate{font-size:48px;font-weight:800;color:var(--green);letter-spacing:-0.03em;line-height:1}
+.bk-hero .rate-note{font-size:14px;color:var(--ink-dim);margin-top:4px}
+
+.bk-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:640px){.bk-grid{grid-template-columns:1fr}}
 .bk-card{
-  background:var(--navy-1);border:1px solid var(--navy-line);border-radius:var(--radius);
-  padding:24px;
+  background:var(--navy-1);border:1px solid var(--navy-line);border-radius:16px;
+  padding:28px 24px;
 }
-.bk-card h3{color:var(--green);font-size:16px;margin-bottom:10px}
-.bk-card ul{list-style:none;padding:0}
+.bk-card h4{font-size:14px;font-weight:700;color:var(--green);margin-bottom:14px;letter-spacing:0.02em;text-transform:uppercase}
 .bk-card li{
-  font-size:14px;color:var(--ink-dim);padding:6px 0;
-  border-bottom:1px solid rgba(30,45,74,0.5);
-  display:flex;align-items:flex-start;gap:8px;
+  list-style:none;font-size:13.5px;color:var(--ink-dim);padding:8px 0;
+  border-bottom:1px solid rgba(30,45,74,0.4);
+  display:flex;align-items:flex-start;gap:10px;line-height:1.5;
 }
 .bk-card li:last-child{border:none}
-.bk-card li::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);margin-top:7px;flex-shrink:0}
+.bk-card li svg{flex-shrink:0;margin-top:2px;color:var(--green)}
 
-/* Comparison */
-.compare{
-  display:grid;grid-template-columns:1fr 1fr;gap:0;
-  border:1px solid var(--navy-line);border-radius:var(--radius);overflow:hidden;
-  margin-top:20px;
+.cost-banner{
+  background:var(--navy-2);border:1px solid var(--navy-line);border-radius:14px;
+  padding:24px;text-align:center;margin-top:16px;
 }
+.cost-banner .big{font-size:22px;font-weight:800;color:var(--ink);margin-bottom:4px}
+.cost-banner p{font-size:13px;color:var(--ink-mute);max-width:480px;margin:0 auto;line-height:1.6}
+
+/* ── Compare ── */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:18px;overflow:hidden;border:1px solid var(--navy-line)}
 @media(max-width:640px){.compare{grid-template-columns:1fr}}
-.compare-col{padding:28px}
-.compare-col.old{background:var(--navy-1)}
-.compare-col.new{background:rgba(61,123,255,0.06);border-left:1px solid var(--navy-line)}
+.compare-col{padding:32px 28px}
+.compare-col.old{background:rgba(255,106,122,0.03)}
+.compare-col.new{background:rgba(62,230,168,0.03);border-left:1px solid var(--navy-line)}
 @media(max-width:640px){.compare-col.new{border-left:none;border-top:1px solid var(--navy-line)}}
-.compare-col h3{font-size:15px;margin-bottom:14px}
+.compare-col h3{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .compare-col.old h3{color:var(--red)}
 .compare-col.new h3{color:var(--green)}
-.compare-col ul{list-style:none;padding:0}
-.compare-col li{font-size:14px;color:var(--ink-dim);padding:5px 0}
-.compare-col.old li::before{content:"x ";color:var(--red);font-weight:700}
-.compare-col.new li::before{content:"+ ";color:var(--green);font-weight:700}
-
-/* FAQ */
-.faq{margin-top:8px}
-.faq-item{border-bottom:1px solid var(--navy-line);padding:18px 0}
-.faq-q{font-weight:600;font-size:15px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-.faq-q::after{content:"+";font-size:20px;color:var(--ink-mute);transition:transform .2s}
-.faq-item.open .faq-q::after{transform:rotate(45deg);color:var(--cyan)}
-.faq-a{font-size:14px;color:var(--ink-dim);max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding-top:0}
-.faq-item.open .faq-a{max-height:300px;padding-top:12px}
-
-/* Guarantee */
-.guarantee{
-  background:rgba(62,230,168,0.06);border:1px solid rgba(62,230,168,0.2);
-  border-radius:var(--radius);padding:28px;text-align:center;margin-top:32px;
+.compare-col li{
+  list-style:none;font-size:13.5px;color:var(--ink-dim);padding:6px 0;
+  display:flex;align-items:flex-start;gap:8px;line-height:1.5;
 }
-.guarantee h3{color:var(--green);margin-bottom:8px}
-.guarantee p{font-size:14px;color:var(--ink-dim);max-width:560px;margin:0 auto}
+.compare-col li svg{flex-shrink:0;margin-top:2px}
 
-/* Final CTA */
-.final-cta{text-align:center;padding:64px 0 80px}
-.final-cta h2{margin-bottom:12px}
-.final-cta p{color:var(--ink-dim);margin-bottom:28px}
+/* ── Audience ── */
+.audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.audience-grid{grid-template-columns:1fr}}
+.audience-card{
+  border-radius:16px;padding:28px 24px;
+}
+.audience-card.yes{background:rgba(62,230,168,0.04);border:1px solid rgba(62,230,168,0.12)}
+.audience-card.no{background:rgba(246,181,74,0.04);border:1px solid rgba(246,181,74,0.12)}
+.audience-card h3{font-size:15px;font-weight:700;margin-bottom:14px}
+.audience-card.yes h3{color:var(--green)}
+.audience-card.no h3{color:var(--amber)}
+.audience-card li{
+  list-style:none;font-size:13.5px;color:var(--ink-dim);padding:5px 0;
+  display:flex;align-items:flex-start;gap:8px;line-height:1.5;
+}
 
-/* Footer */
-footer{padding:32px 0;border-top:1px solid var(--navy-line);text-align:center;font-size:13px;color:var(--ink-mute)}
+/* ── Testimonial ── */
+.testimonial{
+  background:linear-gradient(160deg,var(--navy-1),var(--navy-2));
+  border:1px solid var(--navy-line);border-radius:20px;
+  padding:40px 36px;position:relative;margin-top:32px;
+}
+.testimonial::before{
+  content:"\201C";position:absolute;top:16px;left:28px;
+  font-size:64px;color:rgba(61,123,255,0.15);font-family:Georgia,serif;line-height:1;
+}
+.testimonial blockquote{font-size:16px;color:var(--ink);line-height:1.7;font-style:italic;margin-bottom:20px;padding-left:4px}
+.testimonial .author{display:flex;align-items:center;gap:14px}
+.testimonial .avatar{
+  width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:700;color:var(--navy-0);
+}
+.testimonial .name{font-size:14px;font-weight:700}
+.testimonial .role{font-size:12px;color:var(--ink-mute)}
+
+/* ── FAQ ── */
+.faq-item{
+  border:1px solid var(--navy-line);border-radius:14px;
+  margin-bottom:10px;overflow:hidden;transition:border-color .3s;
+}
+.faq-item:hover{border-color:rgba(61,123,255,0.2)}
+.faq-q{
+  font-weight:600;font-size:14.5px;cursor:pointer;padding:18px 22px;
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--navy-1);transition:background .2s;
+}
+.faq-q:hover{background:var(--navy-2)}
+.faq-q .plus{
+  width:24px;height:24px;border-radius:8px;background:var(--navy-3);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:16px;color:var(--ink-mute);transition:all .2s;
+}
+.faq-item.open .faq-q .plus{background:rgba(111,232,255,0.1);color:var(--cyan);transform:rotate(45deg)}
+.faq-a{
+  font-size:14px;color:var(--ink-dim);line-height:1.65;
+  max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s ease;
+  padding:0 22px;
+}
+.faq-item.open .faq-a{max-height:300px;padding:0 22px 20px}
+
+/* ── Guarantee ── */
+.guarantee{
+  background:linear-gradient(160deg,rgba(62,230,168,0.06),rgba(62,230,168,0.02));
+  border:1px solid rgba(62,230,168,0.15);border-radius:20px;
+  padding:40px 36px;text-align:center;position:relative;overflow:hidden;
+}
+.guarantee::before{
+  content:"";position:absolute;top:0;left:30%;right:30%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+}
+.guarantee .shield{font-size:36px;margin-bottom:12px;display:block}
+.guarantee h3{font-size:20px;font-weight:800;color:var(--green);margin-bottom:8px}
+.guarantee p{font-size:14px;color:var(--ink-dim);max-width:520px;margin:0 auto;line-height:1.7}
+
+/* ── Final CTA ── */
+.final-cta{text-align:center;padding:80px 0 96px;position:relative}
+.final-cta::before{
+  content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(61,123,255,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.final-cta h2{font-family:"Manrope",sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-0.03em;margin-bottom:12px}
+.final-cta p{color:var(--ink-dim);margin-bottom:32px;font-size:16px}
+.final-cta .cta-btn{width:auto;padding:18px 44px;font-size:17px}
+.final-cta .email{margin-top:20px;font-size:13px;color:var(--ink-mute)}
+
+/* ── Footer ── */
+footer{padding:28px 0;border-top:1px solid rgba(30,45,74,0.4);text-align:center;font-size:12px;color:var(--ink-mute)}
 footer a{color:var(--ink-dim)}
+
+/* ── Mobile ── */
+@media(max-width:640px){
+  .wrap{padding:0 20px}
+  .hero{padding:56px 0 0}
+  .price-card{padding:36px 24px 32px}
+  .price-amount{font-size:64px}
+  .section{padding:48px 0}
+  .bk-hero{padding:28px 22px}
+  .bk-hero .rate{font-size:36px}
+  .testimonial{padding:32px 24px}
+  .compare-col{padding:24px 20px}
+  .guarantee{padding:32px 24px}
+}
 </style>
 </head>
 <body>
@@ -188,76 +337,108 @@ footer a{color:var(--ink-dim)}
 <div class="top-bar">
   <div class="wrap">
     <a href="index.html"><img src="./assets/cashflow_logo.svg" alt="CashFlowSmart.io" /></a>
-    <a href="index.html" class="back"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back to site</a>
+    <a href="index.html" class="back">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to site
+    </a>
   </div>
 </div>
 
 <!-- Hero -->
 <section class="hero">
   <div class="wrap">
-    <div class="badge-row">
-      <span class="badge badge-cyan">Founding Cohort</span>
-      <span class="badge badge-amber">32 of 50 spots remaining</span>
-    </div>
-    <h1>Know your real number<br/>every <span class="serif" style="font-style:italic;color:var(--cyan)">Monday morning.</span></h1>
-    <p class="sub">CashFlowSmart gives general contractors one number that matters: your real safe-to-spend. Not your bank balance. Not a spreadsheet guess. The truth.</p>
+    <div class="hero-badge"><span class="dot"></span> Founding Cohort &mdash; 32 of 50 spots left</div>
+    <h1>Financial clarity for<br/>contractors who <span class="highlight">build.</span></h1>
+    <p class="sub">One number every Monday morning: your real safe-to-spend. Not your bank balance. Not a spreadsheet guess. The truth.</p>
+  </div>
+</section>
 
-    <!-- Price Card -->
-    <div class="price-hero">
-      <div class="label">Founding Member</div>
-      <div class="spots">32 of 50 spots remaining</div>
-      <div class="amount"><span class="dollar mono">$</span>295</div>
-      <div class="per">per month &middot; everything included</div>
-      <div class="note">Lock in this rate forever. No price increases for founding members.<br/>Cancel anytime &mdash; no contracts, no setup fees.</div>
-      <a href="mailto:daniel@cashflowsmart.io?subject=Founding%20Member%20Access&body=I%27d%20like%20to%20join%20the%20founding%20cohort." class="cta-btn">Claim your spot <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    </div>
+<!-- Price Card -->
+<section class="price-section">
+  <div class="price-card reveal">
+    <div class="price-label">Founding Member</div>
+    <div class="price-spots"><span class="live-dot"></span> 32 of 50 spots remaining</div>
+    <div class="price-amount"><span class="dollar mono">$</span>295</div>
+    <div class="price-per">per month &middot; everything included</div>
+    <div class="price-divider"></div>
+    <ul class="price-includes">
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Monday Morning Truth dashboard</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> AI Engine &mdash; ask anything, get real answers</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Unlimited jobs, users &amp; bank accounts</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> All integrations included</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Managed bookkeeping at $10/hr</li>
+      <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> White-glove setup &mdash; ready in days</li>
+    </ul>
+    <a href="mailto:daniel@cashflowsmart.io?subject=Founding%20Member%20Access&body=I%27d%20like%20to%20join%20the%20founding%20cohort." class="cta-btn">
+      Claim your spot
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <div class="price-note">Lock in this rate forever. No price increases for founding members.<br/>Cancel anytime &mdash; no contracts, no setup fees.</div>
   </div>
 </section>
 
 <!-- What's Included -->
 <section class="section">
   <div class="wrap">
-    <h2>Everything in $295/month</h2>
-    <div class="feat-grid">
+    <div class="section-label"><span class="bar"></span> What you get</div>
+    <h2>Everything in your $295/month</h2>
+    <p class="section-sub">Every tool a general contractor needs to know their real financial position &mdash; updated daily, explained in plain English.</p>
+    <div class="feat-grid reveal">
       <div class="feat">
-        <div class="icon blue">$</div>
+        <div class="feat-icon blue">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 110 7H6"/></svg>
+        </div>
         <h3>Monday Morning Truth</h3>
-        <p>Every Monday, see your real safe-to-spend — your bank balance minus payroll, open bills, material orders, and tax reserves. One number. No guessing.</p>
+        <p>Every Monday: your real safe-to-spend. Bank balance minus payroll, open bills, material orders, and tax reserves. One number. Zero guessing.</p>
       </div>
       <div class="feat">
-        <div class="icon cyan">AI</div>
+        <div class="feat-icon cyan">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a4 4 0 014 4c0 1.5-.8 2.8-2 3.5v1h-4v-1c-1.2-.7-2-2-2-3.5a4 4 0 014-4zM10 14.5h4M10 17h4M9 20h6"/></svg>
+        </div>
         <h3>AI Engine</h3>
-        <p>Ask plain-English questions: "Can I hire another guy?", "Should I buy that truck?", "Which job is bleeding money?" — get answers backed by your real numbers.</p>
+        <p>"Can I hire another guy?" "Should I buy that truck?" "Which job is bleeding money?" Ask in plain English &mdash; get answers backed by your real data.</p>
       </div>
       <div class="feat">
-        <div class="icon green">%</div>
+        <div class="feat-icon green">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
         <h3>Job &amp; Margin Tracking</h3>
-        <p>See profit margin per job in real time. Know which jobs make money and which are underwater before the final invoice — not after.</p>
+        <p>See profit margin per job in real time. Know which jobs make money and which are underwater before the final invoice &mdash; not after.</p>
       </div>
       <div class="feat">
-        <div class="icon amber">F</div>
+        <div class="feat-icon amber">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 6-6"/></svg>
+        </div>
         <h3>Cash Flow Forecast</h3>
-        <p>12-month forward projection: optimistic and conservative. See when cash gets tight so you can act weeks in advance, not the day before payroll.</p>
+        <p>12-month forward projection: optimistic and conservative. See when cash gets tight weeks in advance &mdash; not the day before payroll.</p>
       </div>
       <div class="feat">
-        <div class="icon blue">B</div>
+        <div class="feat-icon blue">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        </div>
         <h3>Bank Integration</h3>
-        <p>Connects to your bank accounts automatically. Transactions categorized by job. No manual data entry. Unlimited bank accounts included.</p>
+        <p>Connects automatically via Plaid. Transactions categorized by job. No manual entry. Unlimited bank accounts included.</p>
       </div>
       <div class="feat">
-        <div class="icon cyan">R</div>
+        <div class="feat-icon cyan">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+        </div>
         <h3>Receipt Capture</h3>
-        <p>Snap a photo of any receipt. AI reads the vendor, amount, and category. Auto-matched to the right job. Your bookkeeper sees it instantly.</p>
+        <p>Snap a photo. AI reads vendor, amount, category. Auto-matched to the right job. Your bookkeeper sees it instantly.</p>
       </div>
       <div class="feat">
-        <div class="icon green">P</div>
+        <div class="feat-icon green">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
         <h3>Payroll Planning</h3>
-        <p>See upcoming payroll obligations before they hit. Know if you can cover Friday's checks before Monday — not after the money's gone.</p>
+        <p>See upcoming payroll before it hits. Know if you can cover Friday's checks before Monday &mdash; not after the money's gone.</p>
       </div>
       <div class="feat">
-        <div class="icon amber">I</div>
+        <div class="feat-icon amber">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        </div>
         <h3>All Integrations</h3>
-        <p>HardLedger accounting, Contractor Plus estimating, and bank feeds — all included. No per-integration fees. No add-on pricing games.</p>
+        <p>HardLedger accounting, Contractor Plus estimating, bank feeds &mdash; all included. No per-integration fees. No add-on pricing.</p>
       </div>
     </div>
   </div>
@@ -266,39 +447,52 @@ footer a{color:var(--ink-dim)}
 <!-- Managed Bookkeeping -->
 <section class="section">
   <div class="wrap">
-    <h2>Managed Bookkeeping — <span style="color:var(--green)">$10/hr</span></h2>
-    <p style="color:var(--ink-dim);margin-bottom:24px;max-width:640px">Not a spreadsheet person? Best results come from contractors who review their categorizations weekly. Our managed bookkeeping service handles it for you — so your Monday Morning Truth is always accurate.</p>
+    <div class="section-label"><span class="bar"></span> Add-on service</div>
+    <h2>Managed Bookkeeping</h2>
+    <p class="section-sub">Not a spreadsheet person? Our team handles categorization weekly so your Monday Morning Truth is always accurate.</p>
 
-    <div class="bk-grid">
+    <div class="bk-hero reveal">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+        <div>
+          <h3>Dedicated bookkeeper for your account</h3>
+          <div class="rate-note">Billed monthly based on actual hours used</div>
+        </div>
+        <div style="text-align:right">
+          <div class="rate">$10<span style="font-size:20px;color:var(--ink-dim);font-weight:600">/hr</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bk-grid reveal">
       <div class="bk-card">
-        <h3>What's included</h3>
+        <h4>What's included</h4>
         <ul>
-          <li>Weekly transaction categorization by job</li>
-          <li>Bank reconciliation every month</li>
-          <li>Receipt matching and filing</li>
-          <li>Vendor and subcontractor payment tracking</li>
-          <li>Expense categorization (materials, labor, overhead)</li>
-          <li>Monthly financial summary report</li>
-          <li>Direct communication with your bookkeeper</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Weekly transaction categorization by job</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Bank reconciliation every month</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Receipt matching and filing</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Vendor &amp; sub payment tracking</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Expense categorization</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Monthly financial summary</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Direct line to your bookkeeper</li>
         </ul>
       </div>
       <div class="bk-card">
-        <h3>How it works</h3>
+        <h4>How it works</h4>
         <ul>
-          <li>We assign a dedicated bookkeeper to your account</li>
-          <li>They log into your CashFlowSmart dashboard weekly</li>
-          <li>Review and categorize all transactions by job</li>
-          <li>Match receipts you've uploaded to the right expenses</li>
-          <li>Flag anything that looks unusual for your review</li>
-          <li>You get a clean, accurate dashboard every Monday</li>
-          <li>Billed monthly based on actual hours — most contractors use 4-8 hrs/month</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="1"/></svg> Dedicated bookkeeper assigned to you</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="1"/></svg> They log into your dashboard weekly</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="1"/></svg> Categorize all transactions by job</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="1"/></svg> Match receipts to expenses</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="1"/></svg> Flag anything unusual</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="1"/></svg> Clean dashboard every Monday</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="1"/></svg> Most use 4-8 hrs/month</li>
         </ul>
       </div>
     </div>
 
-    <div class="guarantee" style="margin-top:24px;background:rgba(111,232,255,0.05);border-color:rgba(111,232,255,0.15)">
-      <h3 style="color:var(--cyan)">Typical cost: $40 — $80/month</h3>
-      <p>Most contractors with 5-15 active jobs use 4-8 bookkeeping hours per month. That's $40-$80 on top of your $295 subscription. Compare to a part-time bookkeeper at $25-40/hr or a CPA firm at $150-300/hr.</p>
+    <div class="cost-banner reveal">
+      <div class="big">Typical cost: $40 &mdash; $80/month</div>
+      <p>Compare to a part-time bookkeeper at $25-40/hr or a CPA firm at $150-300/hr</p>
     </div>
   </div>
 </section>
@@ -306,59 +500,79 @@ footer a{color:var(--ink-dim)}
 <!-- Before/After -->
 <section class="section">
   <div class="wrap">
+    <div class="section-label"><span class="bar"></span> The difference</div>
     <h2>What changes on Day 1</h2>
-    <div class="compare">
+    <div class="compare reveal">
       <div class="compare-col old">
-        <h3>Without CashFlowSmart</h3>
+        <h3>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          Without CashFlowSmart
+        </h3>
         <ul>
-          <li>Check bank balance, hope for the best</li>
-          <li>Spreadsheet updated... last quarter</li>
-          <li>Find out a job lost money after it's done</li>
-          <li>Guess if you can make payroll Friday</li>
-          <li>Hire based on gut feeling</li>
-          <li>Surprised by tax bills</li>
-          <li>Receipts in a shoebox</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg> Check bank balance, hope for the best</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg> Spreadsheet updated... last quarter</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg> Find out a job lost money after it's done</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg> Guess if you can make payroll Friday</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg> Hire based on gut feeling</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg> Surprised by tax bills</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg> Receipts in a shoebox</li>
         </ul>
       </div>
       <div class="compare-col new">
-        <h3>With CashFlowSmart</h3>
+        <h3>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg>
+          With CashFlowSmart
+        </h3>
         <ul>
-          <li>See real safe-to-spend every morning</li>
-          <li>Numbers updated automatically from bank</li>
-          <li>Catch margin problems mid-job</li>
-          <li>Know payroll coverage 2 weeks ahead</li>
-          <li>AI tells you exactly when you can hire</li>
-          <li>Tax reserves calculated and set aside</li>
-          <li>Snap, upload, auto-categorized</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> See real safe-to-spend every morning</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Numbers updated automatically from bank</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Catch margin problems mid-job</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Know payroll coverage 2 weeks ahead</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> AI tells you exactly when you can hire</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Tax reserves calculated and set aside</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> Snap, upload, auto-categorized</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Who This Is For -->
+<!-- Who it's for -->
 <section class="section">
   <div class="wrap">
-    <h2>Built for general contractors doing $500K — $5M/year</h2>
-    <div class="feat-grid" style="grid-template-columns:1fr 1fr;margin-top:8px">
-      <div class="feat">
-        <h3 style="color:var(--green)">This is for you if:</h3>
-        <p style="margin-top:8px">
-          You run residential or commercial remodel/build projects.
-          You have 2-20 employees or subs.
-          You manage multiple jobs at once.
-          You've ever wondered "can I actually afford this?" before writing a check.
-          You want financial clarity without becoming an accountant.
-        </p>
+    <div class="section-label"><span class="bar"></span> Who this is for</div>
+    <h2>Built for GCs doing $500K &mdash; $5M/year</h2>
+    <div class="audience-grid reveal">
+      <div class="audience-card yes">
+        <h3>This is for you if:</h3>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> You run residential or commercial remodel/build projects</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> You have 2-20 employees or subs</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> You manage multiple jobs at once</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> You've ever wondered "can I actually afford this?"</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg> You want clarity without becoming an accountant</li>
+        </ul>
       </div>
-      <div class="feat">
-        <h3 style="color:var(--amber)">This is NOT for you if:</h3>
-        <p style="margin-top:8px">
-          You're a solo handyman with no employees.
-          You don't have a business bank account yet.
-          You're looking for estimating/bidding software (we integrate with those, but that's not what we do).
-          You're already running a full ERP and CFO team.
-        </p>
+      <div class="audience-card no">
+        <h3>This is NOT for you if:</h3>
+        <ul>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg> Solo handyman with no employees</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg> No business bank account yet</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg> Looking for estimating/bidding software only</li>
+          <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg> Already running a full ERP and CFO team</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Testimonial -->
+    <div class="testimonial reveal">
+      <blockquote>I checked my bank &mdash; it said $6,665. CashFlowSmart showed me I actually had $1,887 safe to spend. That one number changed how I run my entire business.</blockquote>
+      <div class="author">
+        <div class="avatar">DC</div>
+        <div>
+          <div class="name">Daniel Cordoba</div>
+          <div class="role">Principal &middot; Main Street Contractors &middot; Indianapolis, IN</div>
+        </div>
       </div>
     </div>
   </div>
@@ -367,35 +581,36 @@ footer a{color:var(--ink-dim)}
 <!-- FAQ -->
 <section class="section">
   <div class="wrap">
+    <div class="section-label"><span class="bar"></span> Questions</div>
     <h2>Common questions</h2>
-    <div class="faq">
+    <div style="margin-top:8px">
       <div class="faq-item">
-        <div class="faq-q">What does "founding member" mean?</div>
-        <div class="faq-a">You're in the first 50 contractors on the platform. You get the $295/mo rate locked forever — even when the price goes up. You also get a direct line to our team and input on features we build next.</div>
+        <div class="faq-q">What does "founding member" mean? <span class="plus">+</span></div>
+        <div class="faq-a">You're in the first 50 contractors on the platform. You get the $295/mo rate locked forever &mdash; even when the price goes up. You also get a direct line to our team and input on features we build next.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">How fast can I get started?</div>
+        <div class="faq-q">How fast can I get started? <span class="plus">+</span></div>
         <div class="faq-a">White-glove setup takes 1-2 business days. We connect your bank, import your jobs, and configure your dashboard. You'll have your first Monday Morning Truth within a week.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">Do I need to do the bookkeeping myself?</div>
+        <div class="faq-q">Do I need to do the bookkeeping myself? <span class="plus">+</span></div>
         <div class="faq-a">No. You can categorize transactions yourself (takes 10-15 min/week), or add our managed bookkeeping service at $10/hr and we handle everything. Most contractors who see the best results use the managed service.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">What if I already have a bookkeeper or CPA?</div>
-        <div class="faq-a">Great — they can use CashFlowSmart too. We give them a login. The platform makes their job easier with auto-categorized bank transactions, receipt capture, and job-level tracking.</div>
+        <div class="faq-q">What if I already have a bookkeeper or CPA? <span class="plus">+</span></div>
+        <div class="faq-a">They can use CashFlowSmart too. We give them a login. The platform makes their job easier with auto-categorized bank transactions, receipt capture, and job-level tracking.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">Is my financial data secure?</div>
+        <div class="faq-q">Is my financial data secure? <span class="plus">+</span></div>
         <div class="faq-a">Yes. Bank connections use Plaid (bank-grade encryption). Your data is never shared or sold. We use the same security standards as your online banking.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">Can I cancel anytime?</div>
-        <div class="faq-a">Yes. No contracts. No cancellation fees. If CashFlowSmart isn't helping you make better decisions, you can cancel from your dashboard in one click.</div>
+        <div class="faq-q">Can I cancel anytime? <span class="plus">+</span></div>
+        <div class="faq-a">Yes. No contracts. No cancellation fees. Cancel from your dashboard in one click.</div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">What's the difference between bank balance and safe-to-spend?</div>
-        <div class="faq-a">Your bank balance is what the bank says you have. Your safe-to-spend is what's left after payroll, open bills, material orders, and tax reserves. That gap is where most contractors get surprised. We close it.</div>
+        <div class="faq-q">What's the difference between bank balance and safe-to-spend? <span class="plus">+</span></div>
+        <div class="faq-a">Your bank balance is what the bank says you have. Safe-to-spend is what's left after payroll, open bills, material orders, and tax reserves. That gap is where most contractors get surprised. We close it.</div>
       </div>
     </div>
   </div>
@@ -404,9 +619,10 @@ footer a{color:var(--ink-dim)}
 <!-- Guarantee -->
 <section class="section">
   <div class="wrap">
-    <div class="guarantee">
+    <div class="guarantee reveal">
+      <span class="shield">&#x1f6e1;</span>
       <h3>30-Day Money-Back Guarantee</h3>
-      <p>If CashFlowSmart doesn't change how you make financial decisions in the first 30 days, we'll refund every penny. No questions asked. We're building this for contractors who want clarity — if it's not working, we want to know.</p>
+      <p>If CashFlowSmart doesn't change how you make financial decisions in the first 30 days, we'll refund every penny. No questions asked.</p>
     </div>
   </div>
 </section>
@@ -414,27 +630,34 @@ footer a{color:var(--ink-dim)}
 <!-- Final CTA -->
 <section class="final-cta">
   <div class="wrap">
-    <h2>Stop guessing. Start knowing.</h2>
+    <h2>Stop guessing.<br/>Start knowing.</h2>
     <p>32 founding spots left. $295/mo. Everything included. Locked forever.</p>
-    <a href="mailto:daniel@cashflowsmart.io?subject=Founding%20Member%20Access&body=I%27d%20like%20to%20join%20the%20founding%20cohort." class="cta-btn">Claim your founding spot <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    <p style="margin-top:16px;font-size:13px;color:var(--ink-mute)">Questions? Email daniel@cashflowsmart.io</p>
+    <a href="mailto:daniel@cashflowsmart.io?subject=Founding%20Member%20Access&body=I%27d%20like%20to%20join%20the%20founding%20cohort." class="cta-btn">
+      Claim your founding spot
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <div class="email">Questions? Email daniel@cashflowsmart.io</div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <p>CashFlowSmart.io &mdash; Financial clarity for contractors who build. &nbsp;|&nbsp; <a href="index.html">Home</a> &nbsp;|&nbsp; <a href="Dashboard.html">Live Demo</a></p>
-    <p style="margin-top:8px">Powered by HardLedger &amp; PivotMarkets.ai</p>
+    <p>CashFlowSmart.io &mdash; Financial clarity for contractors who build. &nbsp;|&nbsp; <a href="index.html">Home</a></p>
+    <p style="margin-top:6px">Powered by HardLedger &amp; PivotMarkets.ai</p>
   </div>
 </footer>
 
 <script>
+// FAQ toggle
 document.querySelectorAll('.faq-q').forEach(q=>{
-  q.addEventListener('click',()=>{
-    const item=q.parentElement;
-    item.classList.toggle('open');
-  });
+  q.addEventListener('click',()=>q.parentElement.classList.toggle('open'));
 });
+
+// Scroll reveal
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
 </body>
 </html>
