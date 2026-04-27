@@ -550,7 +550,7 @@ function AccountsScreen({ compact }) {
       {showCSVModal && <CSVUploadModal onClose={() => setShowCSVModal(false)} />}
       <Topbar
         title="Accounts"
-        sub="MSC Bank · Plaid connected · Live · 512 transactions"
+        sub="MSC Bank · CSV import · Live · 512 transactions"
         actions={
           <button
             onClick={() => setShowCSVModal(true)}
@@ -1349,7 +1349,7 @@ function OnboardingScreen({ onNavigate }) {
             </button>
           </div>
 
-          {/* B — Plaid */}
+          {/* B — Coming Soon (Plaid removed — not live yet) */}
           <div
             onMouseEnter={() => setHoverB(true)}
             onMouseLeave={() => setHoverB(false)}
@@ -1358,25 +1358,24 @@ function OnboardingScreen({ onNavigate }) {
               borderRadius: 16, padding: '24px 20px',
               background: hoverB ? 'rgba(61,123,255,0.09)' : 'rgba(61,123,255,0.05)',
               transition: 'all 0.15s', display: 'flex', flexDirection: 'column', gap: 14,
-              position: 'relative',
+              position: 'relative', opacity: 0.55, pointerEvents: 'none',
             }}
           >
             <div style={{ position: 'absolute', top: 12, right: 12 }}>
-              <Chip color="green">RECOMMENDED</Chip>
+              <Chip color="amber">COMING SOON</Chip>
             </div>
             <div style={{ width: 46, height: 46, borderRadius: 12, background: 'rgba(61,123,255,0.12)', border: '1px solid rgba(61,123,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <Icon name="link" size={20} color="#3D7BFF" strokeWidth={1.8} />
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: 6, paddingRight: 70 }}>Connect automatically</div>
-              <div style={{ fontSize: 12, color: 'var(--color-text-muted)', lineHeight: 1.55 }}>Secure read-only bank link via Plaid. Syncs daily so your numbers are always fresh.</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: 6, paddingRight: 70 }}>Auto-connect bank</div>
+              <div style={{ fontSize: 12, color: 'var(--color-text-muted)', lineHeight: 1.55 }}>Direct bank connection coming soon. For now, use CSV import — works with any US bank.</div>
             </div>
             <button
-              style={{ padding: '10px 14px', borderRadius: 9, background: '#3D7BFF', border: 'none', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: "'Manrope',sans-serif", boxShadow: '0 2px 8px rgba(61,123,255,0.35)', transition: 'all 0.15s', textAlign: 'center', marginTop: 'auto' }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#2F68EE'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(61,123,255,0.45)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#3D7BFF'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(61,123,255,0.35)'; }}
+              disabled
+              style={{ padding: '10px 14px', borderRadius: 9, background: 'var(--color-border)', border: 'none', color: 'var(--color-text-muted)', fontSize: 12, fontWeight: 700, cursor: 'default', fontFamily: "'Manrope',sans-serif", transition: 'all 0.15s', textAlign: 'center', marginTop: 'auto' }}
             >
-              Connect with Plaid
+              Coming soon
             </button>
           </div>
         </div>

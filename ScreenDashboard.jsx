@@ -869,7 +869,7 @@ function DashboardScreen({ compact, onNavigate }) {
   const integrations = [
     { name: 'QuickBooks', status: 'Connected', color: '#2CA01C' },
     { name: 'Buildertrend', status: 'Connected', color: CF.amber },
-    { name: 'Plaid', status: 'Connected', color: CF.blue },
+    { name: 'CSV Import', status: 'Connected', color: CF.blue },
   ];
 
   return (
@@ -1403,7 +1403,7 @@ function DashboardScreen({ compact, onNavigate }) {
             </div>
             <div style={{ fontSize: 11, fontWeight: 700, color: CF.inkMute, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 10 }}>Data sources</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
-              {['MSC Bank feed', 'Plaid connected', 'Gusto payroll', 'Q1 2026 actuals', '91 days history'].map(s => (
+              {['MSC Bank feed', 'CSV import', 'Gusto payroll', 'Q1 2026 actuals', '91 days history'].map(s => (
                 <span key={s} style={{ fontSize: 10, padding: '4px 10px', borderRadius: 999, background: 'rgba(61,123,255,0.1)', border: '1px solid rgba(61,123,255,0.22)', color: CF.blue, fontWeight: 600 }}>{s}</span>
               ))}
             </div>
