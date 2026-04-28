@@ -438,23 +438,70 @@ function MobileNav({ active, onNav }) {
   const items = [
     { id: 'dashboard', icon: 'dashboard', label: 'Home' },
     { id: 'forecast',  icon: 'forecast',  label: 'Cash Flow' },
-    { id: 'receipts',  icon: 'receipt',   label: 'Receipts' },
     { id: 'ai',        icon: 'ai',        label: 'AI', special: true },
+    { id: 'receipts',  icon: 'receipt',   label: 'Receipts' },
     { id: 'jobs',      icon: 'jobs',      label: 'Jobs' },
   ];
   return (
-    <nav style={{ display: 'flex', borderTop: `1px solid ${CF.navyLine}`, background: CF.navy1, flexShrink: 0, paddingBottom: 'env(safe-area-inset-bottom)', width: '100%' }}>
+    <nav style={{
+      display: 'flex', alignItems: 'center', gap: 4,
+      background: 'rgba(15,22,41,0.92)',
+      backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+      border: '1px solid rgba(30,45,74,0.8)',
+      borderRadius: 999,
+      padding: '8px 10px',
+      boxShadow: '0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3)',
+    }}>
       {items.map(item => {
         const isActive = active === item.id;
         const isAI = item.special;
+        const activeColor = isAI ? CF.cyan : CF.blue;
         return (
-          <div key={item.id} onClick={() => onNav(item.id)} style={{
-            flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'center',
-            justifyContent: 'center', padding: '10px 4px 8px', cursor: 'pointer', gap: 4,
-            background: isAI && isActive ? 'rgba(111,232,255,0.05)' : 'transparent',
-          }}>
-            <Icon name={item.icon} size={19} color={isActive ? (isAI ? CF.cyan : CF.blue) : CF.inkMute} strokeWidth={isActive ? 2.1 : 1.7} />
-            <span style={{ fontSize: 10, color: isActive ? (isAI ? CF.cyan : CF.blue) : CF.inkMute, fontWeight: isActive ? 700 : 500, letterSpacing: '0.02em', textAlign: 'center', whiteSpace: 'nowrap' }}>{item.label}</span>
+          <div
+            key={item.id}
+            onClick={() => onNav(item.id)}
+            title={item.label}
+            style={{
+              position: 'relative',
+              width: isAI ? 52 : 44,
+              height: isAI ? 52 : 44,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', borderRadius: 999, flexShrink: 0,
+              background: isActive
+                ? isAI
+                  ? 'rgba(111,232,255,0.15)'
+                  : 'rgba(61,123,255,0.18)'
+                : 'transparent',
+              border: isAI && isActive
+                ? '1px solid rgba(111,232,255,0.3)'
+                : isActive
+                  ? '1px solid rgba(61,123,255,0.25)'
+                  : '1px solid transparent',
+              transition: 'background 0.18s, border-color 0.18s, transform 0.12s',
+              transform: isActive ? 'scale(1.08)' : 'scale(1)',
+            }}
+          >
+            {isAI && isActive && (
+              <div style={{
+                position: 'absolute', inset: -3, borderRadius: 999,
+                background: 'radial-gradient(circle, rgba(111,232,255,0.12) 0%, transparent 70%)',
+                pointerEvents: 'none',
+              }} />
+            )}
+            <Icon
+              name={item.icon}
+              size={isAI ? 22 : 19}
+              color={isActive ? activeColor : CF.inkMute}
+              strokeWidth={isActive ? 2.2 : 1.7}
+            />
+            {isActive && (
+              <div style={{
+                position: 'absolute', bottom: 4, left: '50%', transform: 'translateX(-50%)',
+                width: 4, height: 4, borderRadius: 999,
+                background: activeColor,
+                boxShadow: `0 0 6px ${activeColor}`,
+              }} />
+            )}
           </div>
         );
       })}

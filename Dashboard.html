@@ -197,13 +197,18 @@
   .cf-mobile-nav {
     display: none;
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 64px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    height: auto;
     z-index: 200;
-    background: var(--color-bg-card);
-    border-top: 1px solid var(--color-border);
+    background: transparent;
+    border-top: none;
+    pointer-events: none;
+  }
+  .cf-mobile-nav > nav {
+    pointer-events: all;
   }
 
   @container app (max-width: 768px) {
