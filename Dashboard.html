@@ -207,7 +207,7 @@
   @container app (max-width: 768px) {
     .hide-sm { display: none !important; }
     .cf-sidebar-wrap { display: none !important; }
-    .mobile-drawer { display: block !important; }
+    .mobile-drawer { display: flex !important; }
     .mobile-menu-btn { display: flex !important; }
     .range-picker { display: none !important; }
     .topbar-mobile-logo { display: flex !important; }
@@ -353,7 +353,7 @@
   @media (max-width: 768px) {
     .hide-sm { display: none !important; }
     .cf-sidebar-wrap { display: none !important; }
-    .mobile-drawer { display: block !important; }
+    .mobile-drawer { display: flex !important; }
     .mobile-menu-btn { display: flex !important; }
     .range-picker { display: none !important; }
     .topbar-mobile-logo { display: flex !important; }
@@ -1196,11 +1196,74 @@ function App() {
       )}
       <div className="mobile-drawer" style={{
         position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 401,
-        width: 220, transform: mobileDrawerOpen ? 'translateX(0)' : 'translateX(-100%)',
-        transition: 'transform 0.25s cubic-bezier(.4,0,.2,1)',
+        width: 260, transform: mobileDrawerOpen ? 'translateX(0)' : 'translateX(-100%)',
+        transition: 'transform 0.28s cubic-bezier(.4,0,.2,1)',
         display: 'none',
+        background: '#0A0F1C',
+        borderRight: '1px solid #1E2D4A',
+        boxShadow: '4px 0 32px rgba(0,0,0,0.5)',
+        flexDirection: 'column',
+        overflowY: 'auto',
       }}>
-        <Sidebar active={screen} onNav={navigate} collapsed={false} onToggle={() => setMobileDrawerOpen(false)} />
+        {/* Header */}
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'16px 20px 20px', borderBottom:'1px solid #1E2D4A', flexShrink:0 }}>
+          <img src="assets/cashflow_logo.svg" alt="CashFlow Smart" style={{ height:28 }} />
+          <button onClick={() => setMobileDrawerOpen(false)} style={{ background:'rgba(255,255,255,0.06)', border:'1px solid #1E2D4A', borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', color:'#9BAAC8', fontSize:18, lineHeight:1 }}>×</button>
+        </div>
+        {/* Nav items */}
+        {[
+          { id:'dashboard', icon:'dashboard', label:'Dashboard' },
+          { id:'forecast',  icon:'forecast',  label:'Cash Flow' },
+          { id:'jobs',      icon:'jobs',      label:'Jobs & Margins' },
+          { id:'accounts',  icon:'accounts',  label:'Accounts' },
+          { id:'receipts',  icon:'receipt',   label:'Receipts' },
+          { id:'payroll',   icon:'payroll',   label:'Payroll', badge:'2' },
+        ].map(item => (
+          <div key={item.id} onClick={() => navigate(item.id)} style={{
+            display:'flex', alignItems:'center', gap:12, padding:'13px 20px', cursor:'pointer',
+            background: screen === item.id ? 'rgba(255,255,255,0.07)' : 'transparent',
+            borderLeft: screen === item.id ? '2px solid #3D7BFF' : '2px solid transparent',
+            transition:'background 0.12s',
+          }}>
+            <Icon name={item.icon} size={16} color={screen === item.id ? '#F0F4FF' : '#5C6B8A'} strokeWidth={screen === item.id ? 2 : 1.7} />
+            <span style={{ flex:1, fontSize:14, fontWeight: screen === item.id ? 600 : 500, color: screen === item.id ? '#F0F4FF' : '#9BAAC8' }}>{item.label}</span>
+            {item.badge && <span style={{ background:'#EF4444', color:'#fff', fontSize:10, fontWeight:700, borderRadius:999, minWidth:18, height:18, display:'flex', alignItems:'center', justifyContent:'center', padding:'0 4px' }}>{item.badge}</span>}
+          </div>
+        ))}
+        {/* Divider + Intelligence */}
+        <div style={{ padding:'20px 20px 4px', fontSize:10, fontWeight:600, letterSpacing:'0.1em', textTransform:'uppercase', color:'#3D7BFF', opacity:0.7 }}>Intelligence</div>
+        {[
+          { id:'ai', icon:'ai', label:'AI Engine', badge:'AI' },
+        ].map(item => (
+          <div key={item.id} onClick={() => navigate(item.id)} style={{
+            display:'flex', alignItems:'center', gap:12, padding:'13px 20px', cursor:'pointer',
+            background: screen === item.id ? 'rgba(111,232,255,0.07)' : 'transparent',
+            borderLeft: screen === item.id ? '2px solid #6FE8FF' : '2px solid transparent',
+            transition:'background 0.12s',
+          }}>
+            <Icon name={item.icon} size={16} color={screen === item.id ? '#6FE8FF' : '#5C6B8A'} strokeWidth={screen === item.id ? 2 : 1.7} />
+            <span style={{ flex:1, fontSize:14, fontWeight: screen === item.id ? 600 : 500, color: screen === item.id ? '#6FE8FF' : '#9BAAC8' }}>{item.label}</span>
+            <span style={{ background:'rgba(111,232,255,0.12)', border:'1px solid rgba(111,232,255,0.2)', color:'#6FE8FF', fontSize:9, fontWeight:700, borderRadius:4, padding:'2px 6px' }}>AI</span>
+          </div>
+        ))}
+        {/* Settings */}
+        <div onClick={() => navigate('settings')} style={{
+          display:'flex', alignItems:'center', gap:12, padding:'13px 20px', cursor:'pointer',
+          background: screen === 'settings' ? 'rgba(255,255,255,0.07)' : 'transparent',
+          borderLeft: screen === 'settings' ? '2px solid #3D7BFF' : '2px solid transparent',
+          transition:'background 0.12s', marginTop:4,
+        }}>
+          <Icon name="settings" size={16} color={screen === 'settings' ? '#F0F4FF' : '#5C6B8A'} strokeWidth={1.7} />
+          <span style={{ fontSize:14, fontWeight:500, color: screen === 'settings' ? '#F0F4FF' : '#9BAAC8' }}>Settings</span>
+        </div>
+        {/* Footer */}
+        <div style={{ marginTop:'auto', padding:'16px 20px', borderTop:'1px solid #1E2D4A', display:'flex', alignItems:'center', gap:12, flexShrink:0 }}>
+          <div style={{ width:38, height:38, borderRadius:12, background:'linear-gradient(135deg,#F97316,#EAB308)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:13, fontWeight:700, color:'#fff', flexShrink:0 }}>DC</div>
+          <div style={{ minWidth:0 }}>
+            <div style={{ fontSize:13, fontWeight:600, color:'#F0F4FF', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>Daniel Cordoba</div>
+            <div style={{ fontSize:11, color:'#5C6B8A', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>daniel@mainstreet.com</div>
+          </div>
+        </div>
       </div>
 
       {/* ── Tweaks panel (hidden, kept for host protocol) ── */}
