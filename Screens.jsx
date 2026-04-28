@@ -618,6 +618,7 @@ function AccountsScreen({ compact }) {
         sub="MSC Bank · CSV import · Live · 512 transactions"
         actions={
           <button
+            className="topbar-import-csv"
             onClick={() => setShowCSVModal(true)}
             style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', borderRadius: 8, background: 'transparent', border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: "'Manrope',sans-serif", transition: 'all 0.15s', whiteSpace: 'nowrap' }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#3D7BFF'; e.currentTarget.style.color = '#3D7BFF'; }}
@@ -700,7 +701,7 @@ function AccountsScreen({ compact }) {
               <div className="hide-xs" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 10, color: CF.inkMute, width: 80, flexShrink: 0 }}>{t.ref}</div>
               <div style={{ flex: 1, fontSize: 12, color: CF.inkDim, minWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.desc}</div>
               <Chip color={t.cat === 'Receivable' ? 'green' : t.cat === 'Labor' ? 'amber' : t.cat === 'Materials' ? 'red' : 'mute'} style={{ fontSize: 9 }}>{t.cat}</Chip>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 700, color: t.pos ? CF.green : CF.red, width: 100, textAlign: 'right', flexShrink: 0 }}>{t.amt}</div>
+              <div className="txn-amount" style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 700, color: t.pos ? CF.green : CF.red, width: 100, textAlign: 'right', flexShrink: 0 }}>{t.amt}</div>
             </div>
           ))}
 
@@ -740,9 +741,11 @@ function PayrollScreen({ compact }) {
           <KPICard label="Payroll / revenue" value="27.1%" sub="Mar actual — target ≤30%" chip="In range" chipColor="blue" mono={false} compact={compact} />
           <KPICard label="Headcount" value="6" sub="4 contractors · 2 staff" mono={false} compact={compact} />
         </div>
-        <AlertBanner type="warning">
-          <strong style={{ color: CF.amber }}>Payroll due Apr 11</strong> — $12,510 via Gusto in 2 weeks. Bank balance is $6,665.51 — an incoming draw is required before this clears.
-        </AlertBanner>
+        <div className="payroll-alert-banner">
+          <AlertBanner type="warning">
+            <strong style={{ color: CF.amber }}>Payroll due Apr 11</strong> — $12,510 via Gusto in 2 weeks. Bank balance is $6,665.51 — an incoming draw is required before this clears.
+          </AlertBanner>
+        </div>
 
         {/* Runs section */}
         <div style={{ border: `1px solid ${CF.navyLine}`, borderRadius: 16, overflow: 'hidden', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', border: `1px solid ${CF.cardBorder}` }}>
@@ -856,27 +859,27 @@ Answer directly with specific dollar amounts. Use contractor language. Be concis
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden', minHeight: 0 }}>
       {/* AI topbar */}
-      <div style={{
+      <div className="ai-topbar-wrap" style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '14px 24px', borderBottom: `1px solid rgba(111,232,255,0.15)`,
         background: CF.navy1,
         flexShrink: 0, gap: 12,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 11, background: 'linear-gradient(135deg,rgba(61,123,255,0.25),rgba(111,232,255,0.15))', border: '1px solid rgba(111,232,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 16px -4px rgba(111,232,255,0.4)' }}>
+        <div className="ai-topbar-left" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 36, height: 36, borderRadius: 11, background: 'linear-gradient(135deg,rgba(61,123,255,0.25),rgba(111,232,255,0.15))', border: '1px solid rgba(111,232,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 16px -4px rgba(111,232,255,0.4)', flexShrink: 0 }}>
             <Icon name="sparkle" size={17} color={CF.cyan} strokeWidth={1.8} />
           </div>
-          <div>
-            <div style={{ fontSize: 14, fontWeight: 700, color: CF.ink }}>AI Decision Engine</div>
-            <div style={{ fontSize: 11, color: CF.cyan, opacity: 0.7, display: 'flex', alignItems: 'center', gap: 5, marginTop: 1 }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: CF.cyan, boxShadow: `0 0 6px ${CF.cyan}` }} />
-              Live · Main Street Contractors data synced
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: CF.ink, whiteSpace: 'nowrap' }}>AI Decision Engine</div>
+            <div className="ai-topbar-sub" style={{ fontSize: 11, color: CF.cyan, opacity: 0.7, display: 'flex', alignItems: 'center', gap: 5, marginTop: 1 }}>
+              <span style={{ width: 5, height: 5, borderRadius: '50%', background: CF.cyan, boxShadow: `0 0 6px ${CF.cyan}`, flexShrink: 0 }} />
+              Live · MSC data synced
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <Btn variant="ai" size="sm"><Icon name="refresh" size={12} color={CF.cyan} />Refresh data</Btn>
-          <Btn variant="primary" size="sm"><Icon name="plus" size={12} color="white" /><span className="hide-sm">New job</span></Btn>
+        <div className="ai-topbar-actions" style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+          <Btn variant="ai" size="sm"><Icon name="refresh" size={12} color={CF.cyan} /><span className="ai-topbar-refresh-text">Refresh</span></Btn>
+          <Btn variant="primary" size="sm"><Icon name="plus" size={12} color="white" /><span className="hide-sm">New</span></Btn>
         </div>
       </div>
 
@@ -897,7 +900,7 @@ Answer directly with specific dollar amounts. Use contractor language. Be concis
           boxShadow: '0 0 60px -20px rgba(111,232,255,0.08)',
         }}>
           {/* Messages */}
-          <div ref={containerRef} style={{ flex: 1, overflowY: 'auto', padding: '22px', display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <div ref={containerRef} className="ai-chat-scroll" style={{ flex: 1, overflowY: 'auto', padding: '22px', display: 'flex', flexDirection: 'column', gap: 18 }}>
             {messages.map((m, i) => (
               <div key={i} style={{ display: 'flex', gap: 12, flexDirection: m.role === 'user' ? 'row-reverse' : 'row', alignItems: 'flex-start' }}>
                 <div style={{
@@ -913,7 +916,7 @@ Answer directly with specific dollar amounts. Use contractor language. Be concis
                 }}>
                   {m.role === 'user' ? 'DC' : <Icon name="sparkle" size={14} color={CF.cyan} />}
                 </div>
-                <div style={{
+                <div className="ai-msg-bubble" style={{
                   maxWidth: '78%',
                   background: m.role === 'user' ? 'rgba(61,123,255,0.12)' : 'var(--color-bg-secondary)',
                   border: `1px solid ${m.role === 'user' ? 'rgba(61,123,255,0.28)' : 'rgba(111,232,255,0.1)'}`,
@@ -937,7 +940,7 @@ Answer directly with specific dollar amounts. Use contractor language. Be concis
           </div>
 
           {/* Suggestions */}
-          <div style={{ padding: '0 20px 12px', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <div className="ai-suggestion-chips" style={{ padding: '0 20px 12px', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {suggestions.map(s => (
               <button key={s} onClick={() => send(s)} style={{ fontSize: 11, padding: '5px 13px', borderRadius: 999, background: 'rgba(111,232,255,0.06)', border: '1px solid rgba(111,232,255,0.18)', color: CF.inkDim, cursor: 'pointer', fontFamily: "'Manrope',sans-serif", fontWeight: 500, transition: 'all 0.15s', whiteSpace: 'nowrap' }}
                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(111,232,255,0.12)'; e.currentTarget.style.color = CF.cyan; e.currentTarget.style.borderColor = 'rgba(111,232,255,0.35)'; }}
@@ -948,7 +951,7 @@ Answer directly with specific dollar amounts. Use contractor language. Be concis
           </div>
 
           {/* Input */}
-          <div style={{ padding: '12px 16px', borderTop: `1px solid ${CF.navyLine}`, display: 'flex', gap: 10, alignItems: 'center', background: CF.navy2 }}>
+          <div className="ai-input-bar" style={{ padding: '12px 16px', borderTop: `1px solid ${CF.navyLine}`, display: 'flex', gap: 10, alignItems: 'center', background: CF.navy2 }}>
             <div style={{ width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <Icon name="sparkle" size={14} color={CF.cyan} strokeWidth={1.7} />
             </div>
@@ -1280,7 +1283,7 @@ function ReceiptsScreen({ compact }) {
               }}>{f}</span>
             ))}
           </div>
-          <Btn variant="ghostBlue" size="sm" onClick={() => setShowUpload(true)}>
+          <Btn variant="ghostBlue" size="sm" className="upload-receipt-btn" onClick={() => setShowUpload(true)}>
             <Icon name="plus" size={12} color="#6BA3FF" /> Upload Receipt
           </Btn>
         </div>
@@ -1321,7 +1324,7 @@ function ReceiptsScreen({ compact }) {
 
                 {/* RIGHT: badges + amount + action — wraps below left group on narrow screens */}
                 <div className="receipt-actions" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 10, width: '100%' }}>
-                  <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+                  <div className="receipt-chips-row" style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                     <Chip color={catColor[r.cat] || 'mute'}>{r.cat}</Chip>
                     <Chip color={statusColor[r.status] || 'mute'}>{r.status}</Chip>
                   </div>

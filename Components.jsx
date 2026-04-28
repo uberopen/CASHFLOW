@@ -115,7 +115,7 @@ function Chip({ children, color = 'mute', style = {} }) {
 }
 
 // ── Button ────────────────────────────────────────────────────────────
-function Btn({ children, variant = 'primary', size = 'md', onClick, style = {}, disabled = false }) {
+function Btn({ children, variant = 'primary', size = 'md', onClick, style = {}, disabled = false, className = '' }) {
   const [hover, setHover] = React.useState(false);
   const sz = { sm: { p: '7px 14px', fs: 12, r: 9 }, md: { p: '10px 20px', fs: 13, r: 11 }, lg: { p: '14px 26px', fs: 15, r: 12 } }[size];
   const v = {
@@ -135,6 +135,7 @@ function Btn({ children, variant = 'primary', size = 'md', onClick, style = {}, 
   }[variant];
   return (
     <button
+      className={className}
       onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
       onClick={onClick} disabled={disabled}
       style={{
@@ -591,7 +592,9 @@ function Topbar({ title, sub, actions, onMenuClick }) {
             )}
           </button>
           {bellOpen && (
-            <div className="notif-dropdown" style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, width: 340, maxWidth: 'calc(100vw - 24px)', background: CF.navy2, border: `1px solid ${CF.navyLine}`, borderRadius: 14, boxShadow: '0 20px 50px -10px rgba(0,0,0,0.5)', zIndex: 1000, overflow: 'hidden' }}>
+            <>
+            <div className="notif-backdrop" onClick={() => setBellOpen(false)} />
+            <div className="notif-dropdown" style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, width: 380, maxWidth: 'calc(100vw - 24px)', background: CF.navy2, border: `1px solid ${CF.navyLine}`, borderRadius: 14, boxShadow: '0 20px 50px -10px rgba(0,0,0,0.5)', zIndex: 1001, overflow: 'hidden' }}>
               <div style={{ padding: '14px 16px', borderBottom: `1px solid ${CF.navyLine}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 600, color: CF.ink }}>Notifications</div>
@@ -623,6 +626,7 @@ function Topbar({ title, sub, actions, onMenuClick }) {
                 <button style={{ fontSize: 11, color: CF.blue, fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Inter','Manrope',sans-serif" }}>View all activity →</button>
               </div>
             </div>
+            </>
           )}
         </div>
         <button className="topbar-new-job" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 9, background: CF.blue, color: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer', border: 'none', fontFamily: "'Inter','Manrope',sans-serif", boxShadow: '0 2px 8px rgba(61,123,255,0.3)', transition: 'all 0.15s' }}

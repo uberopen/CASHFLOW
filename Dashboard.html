@@ -634,10 +634,10 @@
     border-color: var(--color-bg-info-border) !important;
   }
   @media (max-width: 768px) {
-    .screen-scroll { padding-bottom: 32px !important; }
+    .screen-scroll { padding-bottom: 100px !important; }
   }
   @container app (max-width: 768px) {
-    .screen-scroll { padding-bottom: 32px !important; }
+    .screen-scroll { padding-bottom: 100px !important; }
   }
 
   /* ── AI screen KPI grid: 2×2 on mobile ─────────────── */
@@ -977,7 +977,7 @@
     .screen-kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
   @media (max-width: 480px) {
-    .screen-kpi-grid { grid-template-columns: 1fr !important; }
+    .screen-kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
   @container app (min-width: 768px) and (max-width: 1024px) {
     .screen-kpi-grid { grid-template-columns: repeat(3, 1fr) !important; }
@@ -986,7 +986,7 @@
     .screen-kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
   @container app (max-width: 480px) {
-    .screen-kpi-grid { grid-template-columns: 1fr !important; }
+    .screen-kpi-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
 
   /* ── Payroll team roster grid ───────────────────────── */
@@ -1078,6 +1078,143 @@
     z-index: 10;
     background: var(--color-bg-card);
     border-radius: 16px 16px 0 0;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     MOBILE RESPONSIVE — comprehensive 375px fixes
+     ══════════════════════════════════════════════════════ */
+
+  /* ── Notification backdrop (hidden by default) ───────── */
+  .notif-backdrop { display: none; }
+
+  /* ── Import CSV button: hide on mobile ───────────────── */
+  .topbar-import-csv { display: inline-flex; }
+  @media (max-width: 768px) {
+    .topbar-import-csv { display: none !important; }
+  }
+  @container app (max-width: 768px) {
+    .topbar-import-csv { display: none !important; }
+  }
+
+  /* ── Notification panel: full-width fixed on mobile ──── */
+  @media (max-width: 768px) {
+    .notif-backdrop {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    .notif-dropdown {
+      position: fixed !important;
+      top: 56px !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      border-radius: 0 0 16px 16px !important;
+      max-height: 70vh !important;
+      overflow-y: auto !important;
+      z-index: 1001 !important;
+    }
+  }
+
+  /* ── Receipt chips: prevent chip spans from going full-width */
+  .receipt-chips-row span { width: auto !important; justify-content: initial !important; }
+
+  /* ── Upload receipt button: full-width blue on mobile ──  */
+  @media (max-width: 768px) {
+    .upload-receipt-btn {
+      width: 100% !important;
+      justify-content: center !important;
+      background: var(--color-blue) !important;
+      color: white !important;
+      border-radius: 10px !important;
+      padding: 12px 20px !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      border: none !important;
+    }
+  }
+  @container app (max-width: 768px) {
+    .upload-receipt-btn {
+      width: 100% !important;
+      justify-content: center !important;
+      background: var(--color-blue) !important;
+      color: white !important;
+      border-radius: 10px !important;
+      padding: 12px 20px !important;
+      font-weight: 700 !important;
+      border: none !important;
+    }
+  }
+
+  /* ── Accounts: transaction amount size on mobile ─────── */
+  @media (max-width: 768px) {
+    .txn-amount { font-size: 16px !important; }
+    .txn-row { padding: 10px 14px !important; }
+  }
+
+  /* ── AI topbar: prevent wrapping on mobile ───────────── */
+  .ai-topbar-wrap { display: flex; align-items: center; justify-content: space-between; }
+  @media (max-width: 768px) {
+    .ai-topbar-wrap { padding: 10px 14px !important; }
+    .ai-topbar-left { min-width: 0; flex: 1; overflow: hidden; }
+    .ai-topbar-sub { font-size: 10px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ai-topbar-actions { flex-shrink: 0; display: flex; gap: 6px; }
+    .ai-topbar-refresh-text { display: none !important; }
+  }
+  @container app (max-width: 768px) {
+    .ai-topbar-wrap { padding: 10px 14px !important; }
+    .ai-topbar-sub { font-size: 10px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ai-topbar-refresh-text { display: none !important; }
+  }
+
+  /* ── AI message bubbles: no overflow on narrow screens ─ */
+  @media (max-width: 768px) {
+    .ai-msg-bubble { max-width: calc(100vw - 80px) !important; }
+    .ai-chat-scroll { padding-bottom: 140px !important; }
+  }
+  @container app (max-width: 768px) {
+    .ai-msg-bubble { max-width: calc(100vw - 80px) !important; }
+    .ai-chat-scroll { padding-bottom: 140px !important; }
+  }
+
+  /* ── AI suggestion chips: wrap and constrain width ────── */
+  @media (max-width: 768px) {
+    .ai-suggestion-chips { flex-wrap: wrap !important; padding: 0 12px 10px !important; }
+    .ai-suggestion-chips button { max-width: calc(50% - 4px) !important; white-space: normal !important; text-align: left !important; }
+  }
+  @container app (max-width: 768px) {
+    .ai-suggestion-chips { flex-wrap: wrap !important; padding: 0 12px 10px !important; }
+    .ai-suggestion-chips button { max-width: calc(50% - 4px) !important; white-space: normal !important; }
+  }
+
+  /* ── AI input bar: fixed bottom on mobile ────────────── */
+  @media (max-width: 768px) {
+    .ai-input-bar {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 150 !important;
+    }
+  }
+
+  /* ── Payroll alert banner: readable on mobile ─────────── */
+  @media (max-width: 768px) {
+    .payroll-alert-banner > div { font-size: 13px !important; line-height: 1.5 !important; padding: 12px 14px !important; }
+    .payroll-alert-banner > div > div { font-size: 13px !important; line-height: 1.5 !important; }
+  }
+  @container app (max-width: 768px) {
+    .payroll-alert-banner > div { font-size: 13px !important; line-height: 1.5 !important; padding: 12px 14px !important; }
+    .payroll-alert-banner > div > div { font-size: 13px !important; line-height: 1.5 !important; }
+  }
+
+  /* ── Pagination: readable on mobile ──────────────────── */
+  @media (max-width: 480px) {
+    .pagination-bar { font-size: 11px !important; padding: 10px 12px !important; }
+    .pagination-bar button { min-width: 32px !important; min-height: 32px !important; font-size: 11px !important; }
   }
 </style>
 </head>
