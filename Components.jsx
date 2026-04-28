@@ -326,7 +326,7 @@ function Sidebar({ active, onNav, collapsed, onToggle }) {
             style={{ maxWidth: collapsed ? 36 : 160, objectFit: 'contain', objectPosition: 'left center', display: 'block' }}
           />
         </div>
-        {!collapsed && (
+        {!collapsed && onToggle && (
           <div onClick={onToggle} style={{ cursor: 'pointer', padding: 5, borderRadius: 6, opacity: 0.4, transition: 'opacity 0.15s', flexShrink: 0 }}
             onMouseEnter={e => e.currentTarget.style.opacity = 1}
             onMouseLeave={e => e.currentTarget.style.opacity = 0.4}>
