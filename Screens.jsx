@@ -182,7 +182,7 @@ function _PLACEHOLDER_() {
         </div>
 
         {/* Active jobs */}
-        <div style={{ border: `1px solid ${CF.navyLine}`, borderRadius: 16, overflow: 'hidden', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', border: `1px solid ${CF.cardBorder}` }}>
+        <div className="jobs-table-shell" style={{ border: `1px solid ${CF.navyLine}`, borderRadius: 16, overflow: 'hidden', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', border: `1px solid ${CF.cardBorder}` }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 22px', borderBottom: `1px solid ${CF.navyLine}` }}>
             <div style={{ fontWeight: 700, fontSize: 14 }}>Active jobs</div>
             <Btn variant="ghost" size="sm">View all <Icon name="arrow" size={11} color={CF.inkMute} /></Btn>
@@ -287,6 +287,7 @@ function ForecastScreen({ compact }) {
 
 // ── JOBS ──────────────────────────────────────────────────────────────
 function JobsScreen({ compact }) {
+  const [page, setPage] = React.useState(1);
   const jobs = [
     { name: 'Timberland Dr. Rehab',       client: 'Live Indy',      status: 'Active',  quoted: '$86,607', cost: '$73,615', margin: 15 },
     { name: 'INHP Weatherization Pkg. A', client: 'INHP',           status: 'Active',  quoted: '$56,820', cost: '$46,900', margin: 17 },
@@ -295,6 +296,11 @@ function JobsScreen({ compact }) {
     { name: 'Contractor Plus Rehab #7',   client: 'Contractor Plus', status: 'Pending', quoted: '$28,500', cost: '—',      margin: null },
     { name: 'INHP Weatherization Pkg. B', client: 'INHP',           status: 'Closed',  quoted: '$33,200', cost: '$28,420', margin: 14 },
   ];
+  const PER_PAGE = 4;
+  const totalPages = Math.ceil(jobs.length / PER_PAGE);
+  const start = (page - 1) * PER_PAGE;
+  const visibleJobs = jobs.slice(start, start + PER_PAGE);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden', minHeight: 0 }}>
       <Topbar title="Jobs & Margins" sub="4 active · 1 pending · vs. 20% target" />
@@ -316,20 +322,20 @@ function JobsScreen({ compact }) {
             <span>Margin vs. target</span>
             <span style={{ textAlign: 'right' }}>%</span>
           </div>
-          {jobs.map((j, i) => (
+          {visibleJobs.map((j, i) => (
             <div key={i} className="jobs-table-row" style={{
               display: 'grid', gridTemplateColumns: '2fr 1.1fr 80px 1fr 1fr 1.5fr 68px',
-              padding: '14px 22px', borderBottom: i < jobs.length - 1 ? `1px solid ${CF.navyLine}` : 'none',
+              padding: '14px 22px', borderBottom: i < visibleJobs.length - 1 ? `1px solid ${CF.navyLine}` : 'none',
               alignItems: 'center', gap: 10, cursor: 'pointer', transition: 'background 0.15s',
             }}
               onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-              <span style={{ fontSize: 13, fontWeight: 600, color: CF.ink }}>{j.name}</span>
-              <span style={{ fontSize: 12, color: CF.inkDim }}>{j.client}</span>
-              <div><Chip color={j.status === 'Active' ? 'green' : j.status === 'At risk' ? 'red' : j.status === 'Pending' ? 'amber' : 'mute'}>{j.status}</Chip></div>
-              <span style={{ textAlign: 'right', fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: CF.inkDim }}>{j.quoted}</span>
-              <span style={{ textAlign: 'right', fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: CF.inkDim }}>{j.cost}</span>
-              <div style={{ paddingRight: 10 }}>
+              <span className="jobs-cell-job" style={{ fontSize: 13, fontWeight: 600, color: CF.ink }}>{j.name}</span>
+              <span className="jobs-cell-client" style={{ fontSize: 12, color: CF.inkDim }}>{j.client}</span>
+              <div className="jobs-cell-status"><Chip color={j.status === 'Active' ? 'green' : j.status === 'At risk' ? 'red' : j.status === 'Pending' ? 'amber' : 'mute'}>{j.status}</Chip></div>
+              <span className="jobs-cell-quoted" style={{ textAlign: 'right', fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: CF.inkDim }}>{j.quoted}</span>
+              <span className="jobs-cell-cost" style={{ textAlign: 'right', fontFamily: "'JetBrains Mono',monospace", fontSize: 12, color: CF.inkDim }}>{j.cost}</span>
+              <div className="jobs-cell-progress" style={{ paddingRight: 10 }}>
                 {j.margin !== null ? (
                   <div style={{ height: 6, background: CF.navy3, borderRadius: 999, position: 'relative' }}>
                     <div style={{ height: '100%', width: `${Math.min(j.margin, 100)}%`, borderRadius: 999, background: j.margin >= 50 ? `linear-gradient(90deg,${CF.amber},${CF.green})` : CF.red }} />
@@ -337,12 +343,71 @@ function JobsScreen({ compact }) {
                   </div>
                 ) : <span style={{ fontSize: 11, color: CF.inkMute }}>—</span>}
               </div>
-              <div style={{ textAlign: 'right', fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 700, color: j.margin === null ? CF.inkMute : j.margin >= 50 ? CF.green : j.margin >= 30 ? CF.amber : CF.red }}>
+              <div className="jobs-cell-margin" style={{ textAlign: 'right', fontFamily: "'JetBrains Mono',monospace", fontSize: 14, fontWeight: 700, color: j.margin === null ? CF.inkMute : j.margin >= 50 ? CF.green : j.margin >= 30 ? CF.amber : CF.red }}>
                 {j.margin !== null ? `${j.margin}%` : '—'}
               </div>
             </div>
           ))}
+          {totalPages > 1 && (
+            <div className="pagination-bar">
+              <span className="pagination-meta">
+                Showing {start + 1}-{Math.min(start + PER_PAGE, jobs.length)} of {jobs.length} jobs
+              </span>
+              <div className="pagination-actions">
+                <Btn variant="ghost" size="sm" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Previous</Btn>
+                <Chip color="blue">Page {page} of {totalPages}</Chip>
+                <Btn variant="ghost" size="sm" disabled={page === totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))}>Next</Btn>
+              </div>
+            </div>
+          )}
           </div>{/* end table-hscroll */}
+        </div>
+
+        <div className="jobs-mobile-list">
+          {visibleJobs.map(j => (
+            <div key={j.name} className="card jobs-mobile-card">
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-5)' }}>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--weight-bold)', color: CF.ink, lineHeight: 'var(--leading-tight)' }}>{j.name}</div>
+                  <div style={{ fontSize: 'var(--text-base)', color: CF.inkDim, marginTop: 'var(--space-1)' }}>{j.client}</div>
+                </div>
+                <Chip color={j.status === 'Active' ? 'green' : j.status === 'At risk' ? 'red' : j.status === 'Pending' ? 'amber' : 'mute'}>{j.status}</Chip>
+              </div>
+              <div className="jobs-mobile-meta">
+                <div className="jobs-mobile-field">
+                  <span className="jobs-mobile-label">Quoted</span>
+                  <span className="jobs-mobile-value">{j.quoted}</span>
+                </div>
+                <div className="jobs-mobile-field">
+                  <span className="jobs-mobile-label">Cost</span>
+                  <span className="jobs-mobile-value">{j.cost}</span>
+                </div>
+                <div className="jobs-mobile-field">
+                  <span className="jobs-mobile-label">Margin</span>
+                  <span className="jobs-mobile-value" style={{ color: j.margin === null ? CF.inkMute : j.margin >= 50 ? CF.green : j.margin >= 30 ? CF.amber : CF.red }}>{j.margin !== null ? `${j.margin}%` : '—'}</span>
+                </div>
+                <div className="jobs-mobile-field">
+                  <span className="jobs-mobile-label">Target</span>
+                  <span className="jobs-mobile-value">20%</span>
+                </div>
+              </div>
+              <div className="progress-track">
+                <div className="progress-fill progress-fill-red" style={{ width: j.margin !== null ? `${Math.min(j.margin, 100)}%` : '0%' }} />
+              </div>
+            </div>
+          ))}
+          {totalPages > 1 && (
+            <div className="pagination-bar card-compact">
+              <span className="pagination-meta">
+                Showing {start + 1}-{Math.min(start + PER_PAGE, jobs.length)} of {jobs.length} jobs
+              </span>
+              <div className="pagination-actions">
+                <Btn variant="ghost" size="sm" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Previous</Btn>
+                <Chip color="blue">Page {page} of {totalPages}</Chip>
+                <Btn variant="ghost" size="sm" disabled={page === totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))}>Next</Btn>
+              </div>
+            </div>
+          )}
         </div>
 
         <AlertBanner type="danger">
@@ -1162,6 +1227,7 @@ function ReceiptsScreen({ compact }) {
   const [filter, setFilter] = React.useState('All');
   const [matched, setMatched] = React.useState({});
   const [showUpload, setShowUpload] = React.useState(false);
+  const [page, setPage] = React.useState(1);
 
   const receipts = [
     { id: 1, sub: 'Brian Rodriguez',  job: 'Timberland Dr. Rehab',       amount: '$342.80', date: 'Mar 29, 2026', cat: 'Direct Expenditure', status: 'Pending' },
@@ -1175,8 +1241,16 @@ function ReceiptsScreen({ compact }) {
   ];
 
   const filtered = filter === 'All' ? receipts : receipts.filter(r => r.status === filter);
+  const PER_PAGE = 4;
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+  const start = (page - 1) * PER_PAGE;
+  const visibleReceipts = filtered.slice(start, start + PER_PAGE);
   const pendingCount  = receipts.filter(r => r.status === 'Pending').length;
   const matchedToday  = receipts.filter(r => r.status === 'Matched' && r.date === 'Apr 23, 2026').length;
+
+  React.useEffect(() => {
+    setPage(1);
+  }, [filter]);
 
   const catColor    = { 'Direct Expenditure': 'blue', 'Overhead': 'amber', 'Tools': 'cyan' };
   const statusColor = { 'Pending': 'amber', 'Matched': 'green', 'Flagged': 'red' };
@@ -1216,20 +1290,21 @@ function ReceiptsScreen({ compact }) {
           {filtered.length === 0 && (
             <div style={{ padding: '48px 24px', textAlign: 'center', color: CF.inkMute, fontSize: 13 }}>No receipts in this category.</div>
           )}
-          {filtered.map((r, i) => {
+          {visibleReceipts.map((r, i) => {
             const isMatched = matched[r.id] || r.status === 'Matched';
             return (
               <div key={r.id}
+                className="receipt-row"
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px',
-                  borderBottom: i < filtered.length - 1 ? `1px solid ${CF.navyLine}` : 'none',
-                  flexWrap: 'wrap', transition: 'background 0.15s',
+                  display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 12, padding: '14px 16px',
+                  borderBottom: i < visibleReceipts.length - 1 || totalPages > 1 ? `1px solid ${CF.navyLine}` : 'none',
+                  transition: 'background 0.15s',
                 }}
                 onMouseEnter={e => e.currentTarget.style.background = 'var(--cf-navy2)'}
                 onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
               >
                 {/* LEFT: thumbnail + info — takes full width on mobile before right group wraps */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 200 }}>
+                <div className="receipt-main" style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0, width: '100%' }}>
                   <div style={{
                     width: 48, height: 48, borderRadius: 10, flexShrink: 0,
                     background: CF.navy3, border: `1px solid ${CF.navyLine}`,
@@ -1237,22 +1312,22 @@ function ReceiptsScreen({ compact }) {
                   }}>
                     <Icon name="receipt" size={20} color={CF.inkMute} />
                   </div>
-                  <div style={{ minWidth: 0 }}>
+                  <div className="receipt-copy" style={{ minWidth: 0 }}>
                     <div style={{ fontSize: 13, fontWeight: 700, color: CF.ink, marginBottom: 1 }}>{r.sub}</div>
-                    <div style={{ fontSize: 11, color: CF.inkDim, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.job}</div>
+                    <div style={{ fontSize: 11, color: CF.inkDim, whiteSpace: 'normal', overflow: 'visible', textOverflow: 'clip', lineHeight: 1.35 }}>{r.job}</div>
                     <div style={{ fontSize: 10, color: CF.inkMute, marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>{r.date}</div>
                   </div>
                 </div>
 
                 {/* RIGHT: badges + amount + action — wraps below left group on narrow screens */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                  <div style={{ display: 'flex', gap: 5 }}>
+                <div className="receipt-actions" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 10, width: '100%' }}>
+                  <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                     <Chip color={catColor[r.cat] || 'mute'}>{r.cat}</Chip>
                     <Chip color={statusColor[r.status] || 'mute'}>{r.status}</Chip>
                   </div>
-                  <div style={{
+                  <div className="receipt-amount" style={{
                     fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 700,
-                    color: CF.ink, minWidth: 76, textAlign: 'right', flexShrink: 0,
+                    color: CF.ink, minWidth: 76, textAlign: 'left', flexShrink: 0,
                   }}>{r.amount}</div>
                   <div style={{ flexShrink: 0 }}>
                     {isMatched ? (
@@ -1274,6 +1349,18 @@ function ReceiptsScreen({ compact }) {
               </div>
             );
           })}
+          {filtered.length > PER_PAGE && (
+            <div className="pagination-bar">
+              <span className="pagination-meta">
+                Showing {start + 1}-{Math.min(start + PER_PAGE, filtered.length)} of {filtered.length} receipts
+              </span>
+              <div className="pagination-actions">
+                <Btn variant="ghost" size="sm" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Previous</Btn>
+                <Chip color="blue">Page {page} of {totalPages}</Chip>
+                <Btn variant="ghost" size="sm" disabled={page === totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))}>Next</Btn>
+              </div>
+            </div>
+          )}
         </div>
 
       </div>

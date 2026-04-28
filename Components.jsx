@@ -527,7 +527,7 @@ function Topbar({ title, sub, actions, onMenuClick }) {
       <div style={{ flex: 1 }} />
 
       {/* Right: actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 'auto', flexShrink: 0 }}>
+      <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 'auto', flexShrink: 0 }}>
         {actions}
         <button onClick={toggleTheme} style={iconBtnStyle(false)} title={isDark ? 'Light mode' : 'Dark mode'}>
           <Icon name={isDark ? 'sun' : 'moon'} size={14} color={CF.inkDim} />
@@ -576,7 +576,7 @@ function Topbar({ title, sub, actions, onMenuClick }) {
             </div>
           )}
         </div>
-        <button style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 9, background: CF.blue, color: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer', border: 'none', fontFamily: "'Inter','Manrope',sans-serif", boxShadow: '0 2px 8px rgba(61,123,255,0.3)', transition: 'all 0.15s' }}
+        <button className="topbar-new-job" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 9, background: CF.blue, color: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer', border: 'none', fontFamily: "'Inter','Manrope',sans-serif", boxShadow: '0 2px 8px rgba(61,123,255,0.3)', transition: 'all 0.15s' }}
           onMouseEnter={e => { e.currentTarget.style.background = '#2F68EE'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
           onMouseLeave={e => { e.currentTarget.style.background = CF.blue; e.currentTarget.style.transform = 'none'; }}>
           <span>+ New job</span>

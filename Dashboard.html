@@ -7,6 +7,8 @@
 <link rel="icon" type="image/png" href="assets/favicon_cashflow.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="DESIGN/tokens.css"/>
+<link rel="stylesheet" href="DESIGN/components.css"/>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
@@ -217,10 +219,131 @@
   }
 
   /* ── Receipts screen responsive ─────────────────────── */
+  .receipt-row {
+    align-items: stretch !important;
+    flex-direction: column !important;
+    gap: var(--space-5) !important;
+  }
+  .receipt-main {
+    width: 100%;
+    min-width: 0 !important;
+  }
+  .receipt-copy {
+    min-width: 0;
+  }
+  .receipt-copy > div {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    line-height: var(--leading-snug);
+  }
+  .receipt-actions {
+    width: 100%;
+    align-items: stretch !important;
+    flex-direction: column !important;
+    gap: var(--space-4) !important;
+  }
+  .receipt-actions > *,
+  .receipt-actions button,
+  .receipt-actions span {
+    width: 100%;
+    justify-content: center;
+  }
+  .receipt-amount {
+    text-align: left !important;
+  }
+  @media (max-width: 1100px) {
+    .receipt-row {
+      align-items: stretch !important;
+      flex-direction: column !important;
+      gap: var(--space-5) !important;
+      padding: var(--space-7) !important;
+    }
+    .receipt-main {
+      width: 100%;
+      min-width: 0 !important;
+    }
+    .receipt-copy {
+      min-width: 0;
+    }
+    .receipt-copy > div {
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      line-height: var(--leading-snug);
+    }
+    .receipt-actions {
+      width: 100%;
+      align-items: stretch !important;
+      flex-direction: column !important;
+      gap: var(--space-4) !important;
+    }
+    .receipt-actions > *,
+    .receipt-actions button,
+    .receipt-actions span {
+      width: 100%;
+      justify-content: center;
+    }
+    .receipt-amount {
+      text-align: left !important;
+    }
+  }
+  @container app (max-width: 1100px) {
+    .receipt-row {
+      align-items: stretch !important;
+      flex-direction: column !important;
+      gap: var(--space-5) !important;
+      padding: var(--space-7) !important;
+    }
+    .receipt-main {
+      width: 100%;
+      min-width: 0 !important;
+    }
+    .receipt-actions {
+      width: 100%;
+      align-items: stretch !important;
+      flex-direction: column !important;
+      gap: var(--space-4) !important;
+    }
+  }
   @media (max-width: 480px) {
     .receipt-filter-bar { flex-direction: column !important; align-items: stretch !important; }
     .receipt-filter-bar > div { justify-content: center; }
     .receipt-filter-bar > button { width: 100%; justify-content: center; }
+    .receipt-row {
+      align-items: stretch !important;
+      flex-direction: column !important;
+      gap: var(--space-5) !important;
+      padding: var(--space-7) !important;
+    }
+    .receipt-main {
+      width: 100%;
+      min-width: 0 !important;
+    }
+    .receipt-copy {
+      min-width: 0;
+    }
+    .receipt-copy > div {
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      line-height: var(--leading-snug);
+    }
+    .receipt-actions {
+      width: 100%;
+      align-items: stretch !important;
+      flex-direction: column !important;
+      gap: var(--space-4) !important;
+    }
+    .receipt-actions > *,
+    .receipt-actions button,
+    .receipt-actions span {
+      width: 100%;
+      justify-content: center;
+    }
+    .receipt-amount {
+      text-align: left !important;
+    }
   }
   @container app (max-width: 480px) {
     .receipt-filter-bar { flex-direction: column !important; align-items: stretch !important; }
@@ -235,31 +358,170 @@
     .range-picker { display: none !important; }
     .topbar-mobile-logo { display: flex !important; }
     .topbar-page-title { display: none !important; }
+    .topbar-mobile-logo img { max-width: calc(var(--space-12) * 3) !important; object-fit: contain; }
+    .topbar-actions { gap: var(--space-1) !important; }
+    .topbar-new-job,
+    .cf-topbar > div:last-child > button:last-child {
+      width: calc(var(--space-10) + var(--space-2)) !important;
+      height: calc(var(--space-10) + var(--space-1)) !important;
+      padding: 0 !important;
+      justify-content: center !important;
+      font-size: 0 !important;
+    }
+    .topbar-new-job span,
+    .topbar-new-job svg,
+    .cf-topbar > div:last-child > button:last-child span,
+    .cf-topbar > div:last-child > button:last-child svg { display: none !important; }
+    .topbar-new-job::before,
+    .cf-topbar > div:last-child > button:last-child::before {
+      content: "+";
+      font-size: var(--text-2xl);
+      line-height: var(--leading-none);
+      font-weight: var(--weight-black);
+    }
+  }
+
+  .pagination-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    padding: var(--space-5) var(--space-7);
+    border-top: var(--border-thin) var(--color-border);
+    background: var(--color-bg-card);
+  }
+  .pagination-meta {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  .pagination-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  @media (max-width: 480px) {
+    .pagination-bar {
+      align-items: stretch;
+      flex-direction: column;
+    }
+    .pagination-actions button {
+      flex: 1;
+      justify-content: center;
+    }
   }
   @media (max-width: 480px) {
     .hide-xs { display: none !important; }
   }
 
-  /* Jobs table: collapse to simpler layout on small screens */
+  /* Jobs table: convert to readable cards on small screens */
   @media (max-width: 900px) {
-    .jobs-table-header { display: none !important; }
-    .jobs-table-row {
-      grid-template-columns: 1fr auto 60px !important;
-      gap: 10px !important;
+    .jobs-table-shell { display: none !important; }
+    .jobs-mobile-list {
+      display: flex !important;
+      flex-direction: column;
+      gap: var(--space-5);
     }
-    .jobs-table-row > *:nth-child(4),
-    .jobs-table-row > *:nth-child(5),
-    .jobs-table-row > *:nth-child(6) { display: none !important; }
+    .jobs-table-header { display: none !important; }
+    .table-hscroll > .jobs-table-row { min-width: 0 !important; }
+    .jobs-table-row {
+      grid-template-columns: minmax(0, 1fr) auto !important;
+      gap: var(--space-5) !important;
+      padding: var(--space-7) !important;
+      align-items: start !important;
+    }
+    .jobs-table-row > * { min-width: 0; }
+    .jobs-cell-job { grid-column: 1 / -1; }
+    .jobs-cell-client,
+    .jobs-cell-status,
+    .jobs-cell-quoted,
+    .jobs-cell-cost,
+    .jobs-cell-margin {
+      display: flex !important;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-5);
+      padding: var(--space-3) var(--space-4);
+      border: var(--border-thin) var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--color-bg-secondary);
+    }
+    .jobs-cell-client::before { content: "Client"; }
+    .jobs-cell-status::before { content: "Status"; }
+    .jobs-cell-quoted::before { content: "Quoted"; }
+    .jobs-cell-cost::before { content: "Cost"; }
+    .jobs-cell-margin::before { content: "Margin"; }
+    .jobs-cell-client::before,
+    .jobs-cell-status::before,
+    .jobs-cell-quoted::before,
+    .jobs-cell-cost::before,
+    .jobs-cell-margin::before {
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--tracking-wider);
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+    .jobs-cell-progress {
+      grid-column: 1 / -1;
+      padding: var(--space-3) var(--space-4);
+      border: var(--border-thin) var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--color-bg-secondary);
+    }
   }
   @container app (max-width: 900px) {
-    .jobs-table-header { display: none !important; }
-    .jobs-table-row {
-      grid-template-columns: 1fr auto 60px !important;
-      gap: 10px !important;
+    .jobs-table-shell { display: none !important; }
+    .jobs-mobile-list {
+      display: flex !important;
+      flex-direction: column;
+      gap: var(--space-5);
     }
-    .jobs-table-row > *:nth-child(4),
-    .jobs-table-row > *:nth-child(5),
-    .jobs-table-row > *:nth-child(6) { display: none !important; }
+    .jobs-table-header { display: none !important; }
+    .table-hscroll > .jobs-table-row { min-width: 0 !important; }
+    .jobs-table-row {
+      grid-template-columns: minmax(0, 1fr) auto !important;
+      gap: var(--space-5) !important;
+      padding: var(--space-7) !important;
+      align-items: start !important;
+    }
+  }
+  .jobs-mobile-list { display: none; }
+  .jobs-mobile-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--space-7);
+  }
+  .jobs-mobile-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+  .jobs-mobile-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    border: var(--border-thin) var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-secondary);
+    min-width: 0;
+  }
+  .jobs-mobile-label {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .jobs-mobile-value {
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    font-weight: var(--weight-bold);
+    color: var(--color-text-primary);
+  }
+  @media (max-width: 420px) {
+    .jobs-mobile-meta { grid-template-columns: 1fr; }
   }
 
   /* ── CashIQ panel (docked right sidebar) ─────────────── */
@@ -358,6 +620,15 @@
     -webkit-overflow-scrolling: touch;
     padding-bottom: 40px;
   }
+  .dashboard-content {
+    scroll-padding: var(--space-9);
+  }
+  .dashboard-card {
+    transition: var(--transition-normal);
+  }
+  .dashboard-card:hover {
+    border-color: var(--color-bg-info-border) !important;
+  }
   @media (max-width: 768px) {
     .screen-scroll { padding-bottom: 100px !important; }
   }
@@ -446,7 +717,7 @@
   @media (max-width: 640px) {
     .bottom-grid { grid-template-columns: 1fr 1fr !important; }
   }
-  @media (max-width: 400px) {
+  @media (max-width: 420px) {
     .bottom-grid { grid-template-columns: 1fr !important; }
   }
   @container app (max-width: 800px) {
@@ -464,6 +735,9 @@
   }
   @media (max-width: 640px) {
     .kpi-grid { grid-template-columns: 1fr 1fr !important; }
+  }
+  @media (max-width: 420px) {
+    .kpi-grid { grid-template-columns: 1fr !important; }
   }
   @container app (max-width: 800px) {
     .kpi-grid { grid-template-columns: 1fr 1fr !important; }
@@ -528,22 +802,86 @@
   /* ── CashIQ floating panel: mobile full-width ───────── */
   @media (max-width: 520px) {
     .cashiq-panel {
-      left: 8px !important;
-      right: 8px !important;
+      top: var(--space-4) !important;
+      left: var(--space-4) !important;
+      right: var(--space-4) !important;
       width: auto !important;
-      bottom: 96px !important;
-      max-height: calc(100vh - 120px) !important;
-      border-radius: 18px !important;
+      height: auto !important;
+      bottom: calc(var(--mobile-nav-height) + var(--space-8)) !important;
+      max-height: calc(100svh - var(--mobile-nav-height) - var(--space-11)) !important;
+      border-radius: var(--radius-2xl) !important;
     }
   }
   @container app (max-width: 520px) {
     .cashiq-panel {
-      left: 8px !important;
-      right: 8px !important;
+      top: var(--space-4) !important;
+      left: var(--space-4) !important;
+      right: var(--space-4) !important;
       width: auto !important;
-      bottom: 96px !important;
-      max-height: calc(100vh - 120px) !important;
-      border-radius: 18px !important;
+      height: auto !important;
+      bottom: calc(var(--mobile-nav-height) + var(--space-8)) !important;
+      max-height: calc(100svh - var(--mobile-nav-height) - var(--space-11)) !important;
+      border-radius: var(--radius-2xl) !important;
+    }
+  }
+
+  /* ── Dashboard mobile polish ────────────────────────── */
+  @media (max-width: 640px) {
+    .dashboard-content {
+      padding: var(--space-7) var(--space-6) calc(var(--mobile-nav-height) + var(--space-12)) !important;
+      gap: var(--space-5) !important;
+      scroll-padding: var(--space-7);
+    }
+    .dashboard-card {
+      border-radius: var(--radius-xl) !important;
+      box-shadow: var(--color-card-shadow) !important;
+    }
+    .kpi-spark-card {
+      padding: var(--space-7) var(--space-7) 0 !important;
+    }
+    .mmt-card-header {
+      padding: var(--space-6) var(--space-7) 0 !important;
+      align-items: flex-start !important;
+      gap: var(--space-4) !important;
+      flex-wrap: wrap;
+    }
+    .mmt-card-header > div:first-child {
+      min-width: 0;
+    }
+    .margin-alert-card {
+      align-items: flex-start !important;
+      flex-direction: column !important;
+      gap: var(--space-5) !important;
+      padding: var(--space-7) !important;
+    }
+    .margin-alert-card button {
+      width: 100%;
+      justify-content: center;
+    }
+    .integrations-status {
+      align-items: flex-start !important;
+      flex-direction: column !important;
+      gap: var(--space-4) !important;
+      padding: var(--space-6) var(--space-7) !important;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .dashboard-content {
+      padding-left: var(--space-4) !important;
+      padding-right: var(--space-4) !important;
+    }
+    .mmt-safe-spend {
+      font-size: var(--text-4xl) !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
     }
   }
 
@@ -670,6 +1008,9 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
+  .table-hscroll > .pagination-bar {
+    min-width: 0;
+  }
   @media (max-width: 768px) {
     .table-hscroll > * { min-width: 560px; }
   }
@@ -739,9 +1080,9 @@
 <body>
 <div id="root"></div>
 
-<script type="text/babel" src="Components.jsx"></script>
-<script type="text/babel" src="ScreenDashboard.jsx"></script>
-<script type="text/babel" src="Screens.jsx"></script>
+<script type="text/babel" src="Components.jsx?v=tablefix2"></script>
+<script type="text/babel" src="ScreenDashboard.jsx?v=tablefix2"></script>
+<script type="text/babel" src="Screens.jsx?v=tablefix2"></script>
 
 <script type="text/babel">
 

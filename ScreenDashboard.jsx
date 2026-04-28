@@ -30,7 +30,7 @@ function SparkLine({ data, color = '#3D7BFF', h = 38, w = 240, filled = true, re
 function CashFloorGauge({ pct = 145 }) {
   const r = 46, cx = 60, cy = 60;
   const circ = 2 * Math.PI * r;
-  const filled = Math.min(pct / 200, 1);
+  const filled = Math.min(Math.max(pct, 0) / 100, 1);
   const dash = filled * circ;
   const color = pct >= 100 ? CF.green : pct >= 50 ? CF.amber : CF.red;
   return (
@@ -45,7 +45,7 @@ function CashFloorGauge({ pct = 145 }) {
         strokeDasharray={`${dash} ${circ}`} strokeDashoffset={circ * 0.25}
         strokeLinecap="round" style={{ transform: 'rotate(-90deg)', transformOrigin: '60px 60px' }}/>
       <text x={cx} y={cy - 6} textAnchor="middle" fill={color} fontSize="18" fontWeight="700" fontFamily="JetBrains Mono">{pct}%</text>
-      <text x={cx} y={cy + 10} textAnchor="middle" fill={CF.inkMute} fontSize="9" fontFamily="Manrope" fontWeight="600" letterSpacing="0.08em">ABOVE FLOOR</text>
+      <text x={cx} y={cy + 10} textAnchor="middle" fill={CF.inkMute} fontSize="8.5" fontFamily="Manrope" fontWeight="600" letterSpacing="0.08em">FLOOR COVERED</text>
     </svg>
   );
 }
@@ -203,6 +203,7 @@ function KPISparkCard({ label, value, delta, deltaDir, sparkData, sparkColor, ic
 
   return (
     <div
+      className="kpi-spark-card dashboard-card card-compact"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -710,7 +711,7 @@ function CashFlowForecastWidget() {
   const cx = (i) => leftPad + i * groupW + groupW / 2;
 
   return (
-    <div style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 16, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)' }}>
+    <div className="dashboard-card card" style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 16, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)' }}>
       {/* Title */}
       <div style={{ fontSize: 14, fontWeight: 600, color: CF.ink, marginBottom: 16 }}>Cash Flow Forecast</div>
 
@@ -829,10 +830,14 @@ function DashboardScreen({ compact, onNavigate }) {
   ]);
   const [showBreakdown, setShowBreakdown] = React.useState(false);
   const [showWhyAI, setShowWhyAI] = React.useState(false);
-  const [aiCopilot, setAiCopilot] = React.useState(true);
+  const [aiCopilot, setAiCopilot] = React.useState(() => window.innerWidth >= 1100);
   const [isMobile, setIsMobile] = React.useState(() => window.innerWidth < 768);
   React.useEffect(() => {
-    const handler = () => setIsMobile(window.innerWidth < 768);
+    const handler = () => {
+      const nextIsMobile = window.innerWidth < 768;
+      setIsMobile(nextIsMobile);
+      if (nextIsMobile) setAiCopilot(false);
+    };
     window.addEventListener('resize', handler);
     return () => window.removeEventListener('resize', handler);
   }, []);
@@ -891,7 +896,7 @@ function DashboardScreen({ compact, onNavigate }) {
           }
         />
 
-        <div className="screen-scroll" style={{ flex: 1, overflowY: 'auto', minHeight: 0, padding: compact ? '16px 16px 140px' : '24px 24px 140px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="screen-scroll dashboard-content" style={{ flex: 1, overflowY: 'auto', minHeight: 0, padding: compact ? '16px 16px 140px' : '24px 24px 140px', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
           {/* Alerts */}
           {alerts.length > 0 && (
@@ -905,9 +910,9 @@ function DashboardScreen({ compact, onNavigate }) {
           )}
 
           {/* ── Monday Morning Truth ────────────────── */}
-          <div style={{ border: `1px solid ${CF.navyLine}`, borderRadius: 16, background: CF.navy1, boxShadow: 'var(--cf-cardShadow)' }}>
+          <div className="mmt-card dashboard-card" style={{ border: `1px solid ${CF.navyLine}`, borderRadius: 16, background: CF.navy1, boxShadow: 'var(--cf-cardShadow)' }}>
             {/* Section label */}
-            <div style={{ padding: '14px 24px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div className="mmt-card-header" style={{ padding: '14px 24px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ fontSize: 14, fontWeight: 700, color: CF.ink, display: 'flex', alignItems: 'center', gap: 7 }}>
                 Monday Morning Truth
                 <span style={{ width: 18, height: 18, borderRadius: '50%', background: 'var(--color-bg-secondary)', border: `1px solid ${CF.navyLine}`, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
@@ -926,11 +931,11 @@ function DashboardScreen({ compact, onNavigate }) {
                   <span style={{ width: 7, height: 7, borderRadius: '50%', background: CF.red, flexShrink: 0, boxShadow: '0 0 6px rgba(220,38,38,0.5)', animation: 'cashiq-pulse 2.4s ease-in-out infinite' }} />
                   Safe to spend · as of today
                 </div>
-                <div className="mmt-safe-spend" style={{ fontFamily: "'Inter','Manrope',sans-serif", fontSize: 44, fontWeight: 700, letterSpacing: '-0.03em', color: CF.red, lineHeight: 1 }}>
+                <div className="mmt-safe-spend hero-value danger" style={{ fontFamily: "'Inter','Manrope',sans-serif", fontSize: 44, fontWeight: 700, letterSpacing: '-0.03em', color: CF.red, lineHeight: 1 }}>
                   $1,887
                 </div>
                 <div style={{ fontSize: 11, color: CF.inkMute, marginTop: 8, lineHeight: 1.5 }}>
-                  Bank: $6,665 after tax, payroll nut &amp;<br/>committed materials for active jobs
+                  Bank: $6,665; safe after tax, payroll &amp;<br/>committed materials for active jobs
                 </div>
                 <button onClick={() => setShowBreakdown(p => !p)} className="mmt-view-breakdown-btn" style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 9, background: 'rgba(61,123,255,0.06)', border: '1px solid rgba(61,123,255,0.2)', color: CF.blue, fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: "'Manrope',sans-serif'" }}>
                   {showBreakdown ? 'Hide breakdown' : 'View breakdown'} <Icon name="chevronDown" size={11} color={CF.blue} style={{ transform: showBreakdown ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
@@ -961,7 +966,7 @@ function DashboardScreen({ compact, onNavigate }) {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 8 }}>
                   <Icon name="sparkle" size={14} color={CF.green} strokeWidth={2.5} style={{ marginTop: 2, flexShrink: 0 }} />
-                  <div style={{ fontFamily: "'Instrument Serif',serif", fontSize: 17, lineHeight: 1.3, color: CF.ink }}>
+                  <div className="ai-answer" style={{ fontFamily: "'Instrument Serif',serif", fontSize: 17, lineHeight: 1.3, color: CF.ink }}>
                     <span style={{ color: CF.red }}>Do not hire</span> — 9-day runway.
                   </div>
                 </div>
@@ -999,7 +1004,7 @@ function DashboardScreen({ compact, onNavigate }) {
           <div className="invoice-jobs-grid">
 
             {/* Largest Open Invoice */}
-            <div style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 16, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', display: 'flex', flexDirection: 'column' }}>
+            <div className="dashboard-card card" style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 16, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
                 <div style={{ fontSize: 14, fontWeight: 600, color: CF.ink }}>Largest Open Invoice</div>
                 <span style={{ fontSize: 10, fontWeight: 700, color: CF.red, background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.2)', padding: '3px 8px', borderRadius: 6, letterSpacing: '0.06em' }}>OVERDUE</span>
@@ -1015,7 +1020,7 @@ function DashboardScreen({ compact, onNavigate }) {
             </div>
 
             {/* Jobs Closing This Week */}
-            <div style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 16, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)' }}>
+            <div className="dashboard-card card" style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 16, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
                 <div style={{ fontSize: 14, fontWeight: 600, color: CF.ink }}>Jobs Closing This Week</div>
                 <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--color-cyan)', background: 'rgba(111,232,255,0.08)', border: '1px solid rgba(111,232,255,0.18)', padding: '2px 8px', borderRadius: 999, letterSpacing: '0.06em' }}>CashIQ</span>
@@ -1049,7 +1054,7 @@ function DashboardScreen({ compact, onNavigate }) {
           <div className="forecast-activity-grid">
             <CashFlowForecastWidget />
             {/* Recent Activity */}
-            <div style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 16, padding: '20px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', display: 'flex', flexDirection: 'column' }}>
+            <div className="dashboard-card card recent-activity-card" style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 16, padding: '20px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
                 <span style={{ fontSize: 14, fontWeight: 600, color: CF.ink }}>Recent Activity</span>
                 <span style={{ fontSize: 11, color: CF.blue, fontWeight: 600, cursor: 'pointer' }}>View all</span>
@@ -1095,7 +1100,7 @@ function DashboardScreen({ compact, onNavigate }) {
           {/* ── Cash Flow + Can I Hire? ──────────────── */}
           <div className="hire-chart-grid">
             {/* 30D Cash Flow mini chart */}
-            <div style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 16, padding: '20px 24px 0 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', minWidth: 0, overflow: 'hidden' }}>
+            <div className="dashboard-card card" style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 16, padding: '20px 24px 0 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', minWidth: 0, overflow: 'hidden' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 4, flexWrap: 'wrap', gap: 8 }}>
                 <div>
                   <div style={{ fontWeight: 600, fontSize: 14, color: CF.ink }}>Cash flow projection</div>
@@ -1107,7 +1112,7 @@ function DashboardScreen({ compact, onNavigate }) {
             </div>
 
             {/* Can I Hire Today? */}
-            <div style={{
+            <div className="dashboard-card card" style={{
               border: `1px solid ${CF.cardBorder}`, borderRadius: 16,
               padding: '20px 24px',
               background: CF.navy1, boxShadow: 'var(--cf-cardShadow)',
@@ -1176,7 +1181,7 @@ function DashboardScreen({ compact, onNavigate }) {
           </div>
 
           {/* ── Margin Alert ─────────────────── */}
-          <div style={{ border: '1px solid rgba(217,119,6,0.3)', borderRadius: 14, padding: '16px 20px', background: 'rgba(217,119,6,0.04)', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div className="margin-alert-card" style={{ border: '1px solid rgba(217,119,6,0.3)', borderRadius: 14, padding: '16px 20px', background: 'rgba(217,119,6,0.04)', display: 'flex', alignItems: 'center', gap: 16 }}>
             <div style={{ width: 40, height: 40, borderRadius: 11, background: 'rgba(217,119,6,0.1)', border: '1px solid rgba(217,119,6,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               <Icon name="warning" size={18} color={CF.amber} />
             </div>
@@ -1193,7 +1198,7 @@ function DashboardScreen({ compact, onNavigate }) {
           <div className="bottom-grid">
 
             {/* Upcoming Payroll */}
-            <div style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 14, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div className="dashboard-card card-compact" style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 14, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 2 }}>
                 <Icon name="payroll" size={13} color={CF.amber} />
                 <span style={{ fontSize: 11, fontWeight: 500, color: CF.inkDim }}>Upcoming Payroll</span>
@@ -1205,7 +1210,7 @@ function DashboardScreen({ compact, onNavigate }) {
             </div>
 
             {/* Bills Due */}
-            <div style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 14, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div className="dashboard-card card-compact" style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 14, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 2 }}>
                 <Icon name="accounts" size={13} color={CF.red} />
                 <span style={{ fontSize: 11, fontWeight: 500, color: CF.inkDim }}>Bills due (7 days)</span>
@@ -1217,7 +1222,7 @@ function DashboardScreen({ compact, onNavigate }) {
             </div>
 
             {/* Cash Floor */}
-            <div style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 14, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+            <div className="dashboard-card card-compact" style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 14, padding: '20px 24px', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 7, width: '100%', marginBottom: 2 }}>
                 <Icon name="zap" size={13} color={CF.blue} />
                 <span style={{ fontSize: 11, fontWeight: 500, color: CF.inkDim }}>Safety Buffer</span>
@@ -1229,8 +1234,8 @@ function DashboardScreen({ compact, onNavigate }) {
                   <span style={{ color: CF.inkDim, fontWeight: 600 }}>$4,900</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10 }}>
-                  <span style={{ color: CF.inkMute }}>Current Balance</span>
-                  <span style={{ color: CF.red, fontWeight: 700 }}>$6,665</span>
+                  <span style={{ color: CF.inkMute }}>Safe-to-Spend</span>
+                  <span style={{ color: CF.red, fontWeight: 700 }}>$1,887</span>
                 </div>
               </div>
             </div>
@@ -1238,7 +1243,7 @@ function DashboardScreen({ compact, onNavigate }) {
           </div>
 
           {/* ── Integrations Status ─────────────────── */}
-          <div style={{ border: `1px solid ${CF.navyLine}`, borderRadius: 12, padding: '12px 20px', background: 'rgba(255,255,255,0.01)', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+          <div className="integrations-status" style={{ border: `1px solid ${CF.navyLine}`, borderRadius: 12, padding: '12px 20px', background: 'rgba(255,255,255,0.01)', display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 10, fontWeight: 700, color: CF.inkMute, letterSpacing: '0.1em', textTransform: 'uppercase', marginRight: 4 }}>Integrations Status</span>
             {integrations.map(ig => (
               <div key={ig.name} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
