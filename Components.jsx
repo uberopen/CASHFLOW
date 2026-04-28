@@ -552,11 +552,13 @@ function Topbar({ title, sub, actions, onMenuClick }) {
     }}>
       {/* Left: title (desktop) + logo (mobile) */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0, flexShrink: 0 }}>
-        {onMenuClick && (
-          <div onClick={onMenuClick} className="mobile-menu-btn" style={{ cursor: 'pointer', display: 'none' }}>
-            <Icon name="menu" size={18} color={CF.inkMute} />
-          </div>
-        )}
+        <div
+          onClick={() => window.dispatchEvent(new CustomEvent('cf-menu-open'))}
+          className="mobile-menu-btn"
+          style={{ cursor: 'pointer', display: 'none', padding: 4 }}
+        >
+          <Icon name="menu" size={20} color={CF.inkMute} />
+        </div>
         {/* Logo — shown only on mobile */}
         <div className="topbar-mobile-logo" style={{ display: 'none', alignItems: 'center', gap: 8 }}>
           {isDark

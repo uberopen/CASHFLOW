@@ -194,27 +194,14 @@
     height: 100%;
   }
   /* Mobile bottom nav: hidden on desktop, fixed at bottom on mobile */
-  .cf-mobile-nav {
-    display: none;
-    position: fixed;
-    bottom: calc(16px + env(safe-area-inset-bottom));
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto;
-    height: auto;
-    z-index: 200;
-    background: transparent;
-    border-top: none;
-    pointer-events: none;
-  }
-  .cf-mobile-nav > nav {
-    pointer-events: all;
-  }
+  .mobile-drawer { display: none; }
+  .mobile-menu-btn { display: none; }
 
   @container app (max-width: 768px) {
     .hide-sm { display: none !important; }
     .cf-sidebar-wrap { display: none !important; }
-    .cf-mobile-nav { display: flex !important; }
+    .mobile-drawer { display: block !important; }
+    .mobile-menu-btn { display: flex !important; }
     .range-picker { display: none !important; }
     .topbar-mobile-logo { display: flex !important; }
     .topbar-page-title { display: none !important; }
@@ -359,7 +346,8 @@
   @media (max-width: 768px) {
     .hide-sm { display: none !important; }
     .cf-sidebar-wrap { display: none !important; }
-    .cf-mobile-nav { display: flex !important; }
+    .mobile-drawer { display: block !important; }
+    .mobile-menu-btn { display: flex !important; }
     .range-picker { display: none !important; }
     .topbar-mobile-logo { display: flex !important; }
     .topbar-page-title { display: none !important; }
@@ -635,10 +623,10 @@
     border-color: var(--color-bg-info-border) !important;
   }
   @media (max-width: 768px) {
-    .screen-scroll { padding-bottom: 100px !important; }
+    .screen-scroll { padding-bottom: 32px !important; }
   }
   @container app (max-width: 768px) {
-    .screen-scroll { padding-bottom: 100px !important; }
+    .screen-scroll { padding-bottom: 32px !important; }
   }
 
   /* ── AI screen KPI grid: 2×2 on mobile ─────────────── */
@@ -1104,6 +1092,13 @@ function App() {
   });
   const [tweaks, setTweaks]       = React.useState(TWEAK_DEFAULTS);
   const [tweaksOpen, setTweaksOpen] = React.useState(false);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const handler = () => setMobileDrawerOpen(true);
+    window.addEventListener('cf-menu-open', handler);
+    return () => window.removeEventListener('cf-menu-open', handler);
+  }, []);
 
   // Auto-collapse sidebar on tablet
   React.useEffect(() => {
@@ -1130,6 +1125,7 @@ function App() {
   const navigate = (id) => {
     setScreen(id);
     localStorage.setItem('cf_screen', id);
+    setMobileDrawerOpen(false);
   };
 
   const toggleSidebar = () => {
@@ -1181,9 +1177,23 @@ function App() {
         </main>
       </div>
 
-      {/* Mobile bottom nav */}
-      <div className="cf-mobile-nav">
-        <MobileNav active={screen} onNav={navigate} />
+      {/* Mobile drawer */}
+      {mobileDrawerOpen && (
+        <div
+          onClick={() => setMobileDrawerOpen(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 400,
+            background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(2px)',
+          }}
+        />
+      )}
+      <div className="mobile-drawer" style={{
+        position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 401,
+        width: 220, transform: mobileDrawerOpen ? 'translateX(0)' : 'translateX(-100%)',
+        transition: 'transform 0.25s cubic-bezier(.4,0,.2,1)',
+        display: 'none',
+      }}>
+        <Sidebar active={screen} onNav={navigate} collapsed={false} onToggle={() => setMobileDrawerOpen(false)} />
       </div>
 
       {/* ── Tweaks panel (hidden, kept for host protocol) ── */}
