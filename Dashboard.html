@@ -221,132 +221,102 @@
     .hide-xs { display: none !important; }
   }
 
-  /* ── Receipts screen responsive ─────────────────────── */
-  .receipt-row {
-    align-items: stretch !important;
-    flex-direction: column !important;
-    gap: var(--space-5) !important;
+  /* ── Receipt table — Bootstrap-style responsive ────── */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
-  .receipt-main {
+  .receipt-table {
     width: 100%;
-    min-width: 0 !important;
+    border-collapse: collapse;
+    table-layout: auto;
   }
-  .receipt-copy {
-    min-width: 0;
+  .rt-th {
+    padding: 8px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted, #8b919e);
+    text-align: left;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--color-border, rgba(0,0,0,0.08));
+    font-family: 'Inter','system-ui',sans-serif;
   }
-  .receipt-copy > div {
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    line-height: var(--leading-snug);
+  .rt-th.rt-right { text-align: right; }
+  .rt-td {
+    padding: 8px 12px;
+    vertical-align: middle;
+    white-space: nowrap;
+    font-size: 13px;
   }
-  .receipt-actions {
-    width: 100%;
-    align-items: stretch !important;
-    flex-direction: column !important;
-    gap: var(--space-4) !important;
+  .rt-td.rt-right { text-align: right; }
+  .rt-icon {
+    width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0;
+    background: var(--color-bg-secondary, #f5f6f8);
+    border: 1px solid var(--color-border, rgba(0,0,0,0.08));
+    display: flex; align-items: center; justify-content: center;
   }
-  .receipt-actions > *,
-  .receipt-actions button,
-  .receipt-actions span {
-    width: 100%;
-    justify-content: center;
+  .rt-name {
+    font-size: 13px; font-weight: 600;
+    color: var(--color-text-primary, #1a1d23);
+    line-height: 1.3;
   }
-  .receipt-amount {
-    text-align: left !important;
+  .rt-job {
+    font-size: 11px;
+    color: var(--color-text-muted, #8b919e);
+    white-space: normal;
+    max-width: 180px;
+    line-height: 1.3;
   }
-  @media (max-width: 1100px) {
-    .receipt-row {
-      align-items: stretch !important;
-      flex-direction: column !important;
-      gap: var(--space-5) !important;
-      padding: var(--space-7) !important;
-    }
-    .receipt-main {
-      width: 100%;
-      min-width: 0 !important;
-    }
-    .receipt-copy {
-      min-width: 0;
-    }
-    .receipt-copy > div {
-      white-space: normal !important;
-      overflow: visible !important;
-      text-overflow: clip !important;
-      line-height: var(--leading-snug);
-    }
-    .receipt-actions {
-      width: 100%;
-      align-items: stretch !important;
-      flex-direction: column !important;
-      gap: var(--space-4) !important;
-    }
-    .receipt-actions > *,
-    .receipt-actions button,
-    .receipt-actions span {
-      width: 100%;
-      justify-content: center;
-    }
-    .receipt-amount {
-      text-align: left !important;
-    }
+  .rt-date {
+    font-size: 12px;
+    color: var(--color-text-muted, #8b919e);
+    font-family: 'JetBrains Mono', monospace;
   }
-  @container app (max-width: 1100px) {
-    .receipt-row {
-      align-items: stretch !important;
-      flex-direction: column !important;
-      gap: var(--space-5) !important;
-      padding: var(--space-7) !important;
-    }
-    .receipt-main {
-      width: 100%;
-      min-width: 0 !important;
-    }
-    .receipt-actions {
-      width: 100%;
-      align-items: stretch !important;
-      flex-direction: column !important;
-      gap: var(--space-4) !important;
-    }
+  .rt-amount {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text-primary, #1a1d23);
+  }
+  .rt-matched {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 600;
+    color: var(--color-green, #3ee6a8);
+    background: rgba(62,230,168,0.08);
+    border: 1px solid rgba(62,230,168,0.2);
+    border-radius: 6px; padding: 4px 8px;
+    white-space: nowrap;
+  }
+  .rt-empty {
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--color-text-muted, #8b919e);
+    font-size: 13px;
+  }
+  .receipt-tr {
+    border-bottom: 1px solid var(--color-border, rgba(0,0,0,0.06));
+    transition: background 0.12s;
+  }
+  .receipt-tr:last-child { border-bottom: none; }
+  .receipt-tr:hover {
+    background: var(--cf-navy2, rgba(0,0,0,0.03));
+  }
+  /* Compact rows on small screens */
+  @media (max-width: 768px) {
+    .rt-th { padding: 6px 8px; font-size: 9px; }
+    .rt-td { padding: 6px 8px; font-size: 12px; }
+    .rt-icon { width: 24px; height: 24px; border-radius: 5px; }
+    .rt-name { font-size: 12px; }
+    .rt-job { font-size: 10px; max-width: 140px; }
+    .rt-amount { font-size: 12px; }
+    .rt-date { font-size: 10px; }
   }
   @media (max-width: 480px) {
     .receipt-filter-bar { flex-direction: column !important; align-items: stretch !important; }
     .receipt-filter-bar > div { justify-content: center; }
     .receipt-filter-bar > button { width: 100%; justify-content: center; }
-    .receipt-row {
-      align-items: stretch !important;
-      flex-direction: column !important;
-      gap: var(--space-5) !important;
-      padding: var(--space-7) !important;
-    }
-    .receipt-main {
-      width: 100%;
-      min-width: 0 !important;
-    }
-    .receipt-copy {
-      min-width: 0;
-    }
-    .receipt-copy > div {
-      white-space: normal !important;
-      overflow: visible !important;
-      text-overflow: clip !important;
-      line-height: var(--leading-snug);
-    }
-    .receipt-actions {
-      width: 100%;
-      align-items: stretch !important;
-      flex-direction: column !important;
-      gap: var(--space-4) !important;
-    }
-    .receipt-actions > *,
-    .receipt-actions button,
-    .receipt-actions span {
-      width: 100%;
-      justify-content: center;
-    }
-    .receipt-amount {
-      text-align: left !important;
-    }
   }
   @container app (max-width: 480px) {
     .receipt-filter-bar { flex-direction: column !important; align-items: stretch !important; }
@@ -1119,8 +1089,7 @@
     }
   }
 
-  /* ── Receipt chips: prevent chip spans from going full-width */
-  .receipt-chips-row span { width: auto !important; justify-content: initial !important; }
+  /* (receipt-chips-row removed — now using table layout) */
 
   /* ── Upload receipt button: full-width blue on mobile ──  */
   @media (max-width: 768px) {
@@ -1153,6 +1122,14 @@
   @media (max-width: 768px) {
     .txn-amount { font-size: 16px !important; }
     .txn-row { padding: 10px 14px !important; }
+  }
+
+  /* ── AI sub-header: hide on mobile (topbar handles it) ── */
+  @media (max-width: 768px) {
+    .ai-sub-header { display: none !important; }
+  }
+  @container app (max-width: 768px) {
+    .ai-sub-header { display: none !important; }
   }
 
   /* ── AI topbar: prevent wrapping on mobile ───────────── */

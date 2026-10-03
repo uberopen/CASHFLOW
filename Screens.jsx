@@ -747,47 +747,75 @@ function PayrollScreen({ compact }) {
           </AlertBanner>
         </div>
 
-        {/* Runs section */}
-        <div style={{ border: `1px solid ${CF.navyLine}`, borderRadius: 16, overflow: 'hidden', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', border: `1px solid ${CF.cardBorder}` }}>
-          <div onClick={() => setOpen(p => ({ ...p, runs: !p.runs }))} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 22px', cursor: 'pointer', borderBottom: open.runs ? `1px solid ${CF.navyLine}` : 'none' }}>
+        {/* Payroll runs — responsive table */}
+        <div style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 14, background: CF.navy1, boxShadow: 'var(--cf-cardShadow)' }}>
+          <div onClick={() => setOpen(p => ({ ...p, runs: !p.runs }))} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', cursor: 'pointer', borderBottom: open.runs ? `1px solid ${CF.navyLine}` : 'none' }}>
             <div style={{ fontWeight: 700, fontSize: 14 }}>Payroll runs</div>
             <div style={{ transform: open.runs ? 'rotate(0)' : 'rotate(-90deg)', transition: 'transform 0.2s' }}><Icon name="chevronDown" size={14} color={CF.inkMute} /></div>
           </div>
-          {open.runs && runs.map((r, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '14px 22px', borderBottom: i < runs.length - 1 ? `1px solid ${CF.navyLine}` : 'none', flexWrap: 'wrap' }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: CF.ink }}>{r.date}</div>
-                <div style={{ fontSize: 11, color: CF.inkMute, marginTop: 2 }}>{r.employees} employees</div>
-              </div>
-              <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 18, fontWeight: 700, color: CF.ink }}>{r.amount}</div>
-              <Chip color={r.status === 'Upcoming' ? 'amber' : 'green'}>{r.status}</Chip>
+          {open.runs && (
+            <div className="table-responsive">
+              <table className="receipt-table">
+                <thead>
+                  <tr>
+                    <th className="rt-th" style={{ minWidth: 110 }}>Date</th>
+                    <th className="rt-th" style={{ minWidth: 60 }}>Employees</th>
+                    <th className="rt-th rt-right" style={{ minWidth: 90 }}>Amount</th>
+                    <th className="rt-th" style={{ minWidth: 80 }}>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {runs.map((r, i) => (
+                    <tr key={i} className="receipt-tr">
+                      <td className="rt-td rt-name">{r.date}</td>
+                      <td className="rt-td rt-date">{r.employees}</td>
+                      <td className="rt-td rt-right rt-amount">{r.amount}</td>
+                      <td className="rt-td"><Chip color={r.status === 'Upcoming' ? 'amber' : 'green'}>{r.status}</Chip></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ))}
+          )}
         </div>
 
-        {/* Team section */}
-        <div style={{ border: `1px solid ${CF.navyLine}`, borderRadius: 16, overflow: 'hidden', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', border: `1px solid ${CF.cardBorder}` }}>
-          <div onClick={() => setOpen(p => ({ ...p, team: !p.team }))} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 22px', cursor: 'pointer', borderBottom: open.team ? `1px solid ${CF.navyLine}` : 'none' }}>
+        {/* Team roster — responsive table */}
+        <div style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 14, background: CF.navy1, boxShadow: 'var(--cf-cardShadow)' }}>
+          <div onClick={() => setOpen(p => ({ ...p, team: !p.team }))} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', cursor: 'pointer', borderBottom: open.team ? `1px solid ${CF.navyLine}` : 'none' }}>
             <div style={{ fontWeight: 700, fontSize: 14 }}>Team roster</div>
             <div style={{ transform: open.team ? 'rotate(0)' : 'rotate(-90deg)', transition: 'transform 0.2s' }}><Icon name="chevronDown" size={14} color={CF.inkMute} /></div>
           </div>
           {open.team && (
-            <div className="payroll-team-grid">
-              {team.map((p, i) => (
-                <div key={i} style={{ padding: '14px 22px', borderBottom: `1px solid ${CF.navyLine}`, display: 'flex', alignItems: 'center', gap: 12, borderRight: `1px solid ${CF.navyLine}` }}>
-                  <div style={{ width: 36, height: 36, borderRadius: '50%', background: avatarColors[i % avatarColors.length], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800, color: 'rgba(255,255,255,0.9)', flexShrink: 0 }}>
-                    {p.name.split(' ').map(n => n[0]).join('')}
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: CF.ink, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</div>
-                    <div style={{ fontSize: 10, color: CF.inkMute }}>{p.role} · {p.dept}</div>
-                  </div>
-                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <div style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: 13, fontWeight: 700, color: CF.ink }}>{p.pay}</div>
-                    <div style={{ fontSize: 9, color: CF.inkMute }}>{p.type}</div>
-                  </div>
-                </div>
-              ))}
+            <div className="table-responsive">
+              <table className="receipt-table">
+                <thead>
+                  <tr>
+                    <th className="rt-th" style={{ minWidth: 160 }}>Name</th>
+                    <th className="rt-th" style={{ minWidth: 100 }}>Role</th>
+                    <th className="rt-th" style={{ minWidth: 60 }}>Dept</th>
+                    <th className="rt-th rt-right" style={{ minWidth: 80 }}>Pay</th>
+                    <th className="rt-th" style={{ minWidth: 50 }}>Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {team.map((p, i) => (
+                    <tr key={i} className="receipt-tr">
+                      <td className="rt-td">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <div style={{ width: 28, height: 28, borderRadius: '50%', background: avatarColors[i % avatarColors.length], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 800, color: 'rgba(255,255,255,0.9)', flexShrink: 0 }}>
+                            {p.name.split(' ').map(n => n[0]).join('')}
+                          </div>
+                          <span className="rt-name">{p.name}</span>
+                        </div>
+                      </td>
+                      <td className="rt-td rt-date">{p.role}</td>
+                      <td className="rt-td rt-date">{p.dept}</td>
+                      <td className="rt-td rt-right rt-amount">{p.pay}</td>
+                      <td className="rt-td"><Chip color="mute">{p.type}</Chip></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
@@ -858,28 +886,29 @@ Answer directly with specific dollar amounts. Use contractor language. Be concis
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden', minHeight: 0 }}>
-      {/* AI topbar */}
-      <div className="ai-topbar-wrap" style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '14px 24px', borderBottom: `1px solid rgba(111,232,255,0.15)`,
-        background: CF.navy1,
-        flexShrink: 0, gap: 12,
+      {/* Standard topbar — provides hamburger/logo/bell/theme on all viewports */}
+      <Topbar title="AI Engine" sub="Live · Main Street Contractors data synced"
+        actions={
+          <div className="ai-topbar-actions" style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+            <Btn variant="ai" size="sm"><Icon name="refresh" size={12} color={CF.cyan} /><span className="ai-topbar-refresh-text">Refresh</span></Btn>
+          </div>
+        }
+      />
+      {/* AI sub-header — engine identity, hidden on mobile (topbar handles it) */}
+      <div className="ai-sub-header" style={{
+        display: 'flex', alignItems: 'center', gap: 12,
+        padding: '12px 24px', borderBottom: `1px solid rgba(111,232,255,0.15)`,
+        background: CF.navy1, flexShrink: 0,
       }}>
-        <div className="ai-topbar-left" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 11, background: 'linear-gradient(135deg,rgba(61,123,255,0.25),rgba(111,232,255,0.15))', border: '1px solid rgba(111,232,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 16px -4px rgba(111,232,255,0.4)', flexShrink: 0 }}>
-            <Icon name="sparkle" size={17} color={CF.cyan} strokeWidth={1.8} />
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: CF.ink, whiteSpace: 'nowrap' }}>AI Decision Engine</div>
-            <div className="ai-topbar-sub" style={{ fontSize: 11, color: CF.cyan, opacity: 0.7, display: 'flex', alignItems: 'center', gap: 5, marginTop: 1 }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: CF.cyan, boxShadow: `0 0 6px ${CF.cyan}`, flexShrink: 0 }} />
-              Live · MSC data synced
-            </div>
-          </div>
+        <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg,rgba(61,123,255,0.25),rgba(111,232,255,0.15))', border: '1px solid rgba(111,232,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 16px -4px rgba(111,232,255,0.4)', flexShrink: 0 }}>
+          <Icon name="sparkle" size={15} color={CF.cyan} strokeWidth={1.8} />
         </div>
-        <div className="ai-topbar-actions" style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-          <Btn variant="ai" size="sm"><Icon name="refresh" size={12} color={CF.cyan} /><span className="ai-topbar-refresh-text">Refresh</span></Btn>
-          <Btn variant="primary" size="sm"><Icon name="plus" size={12} color="white" /><span className="hide-sm">New</span></Btn>
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: CF.ink }}>AI Decision Engine</div>
+          <div style={{ fontSize: 11, color: CF.cyan, opacity: 0.7, display: 'flex', alignItems: 'center', gap: 5, marginTop: 1 }}>
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: CF.cyan, boxShadow: `0 0 6px ${CF.cyan}`, flexShrink: 0 }} />
+            Live · Main Street Contractors data synced
+          </div>
         </div>
       </div>
 
@@ -1244,7 +1273,7 @@ function ReceiptsScreen({ compact }) {
   ];
 
   const filtered = filter === 'All' ? receipts : receipts.filter(r => r.status === filter);
-  const PER_PAGE = 4;
+  const PER_PAGE = 10;
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
   const start = (page - 1) * PER_PAGE;
   const visibleReceipts = filtered.slice(start, start + PER_PAGE);
@@ -1288,78 +1317,66 @@ function ReceiptsScreen({ compact }) {
           </Btn>
         </div>
 
-        {/* Receipt card list */}
-        <div style={{ border: `1px solid ${CF.navyLine}`, borderRadius: 16, overflow: 'hidden', background: CF.navy1, boxShadow: 'var(--cf-cardShadow)', border: `1px solid ${CF.cardBorder}` }}>
-          {filtered.length === 0 && (
-            <div style={{ padding: '48px 24px', textAlign: 'center', color: CF.inkMute, fontSize: 13 }}>No receipts in this category.</div>
-          )}
-          {visibleReceipts.map((r, i) => {
-            const isMatched = matched[r.id] || r.status === 'Matched';
-            return (
-              <div key={r.id}
-                className="receipt-row"
-                style={{
-                  display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 12, padding: '14px 16px',
-                  borderBottom: i < visibleReceipts.length - 1 || totalPages > 1 ? `1px solid ${CF.navyLine}` : 'none',
-                  transition: 'background 0.15s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = 'var(--cf-navy2)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-              >
-                {/* LEFT: thumbnail + info — takes full width on mobile before right group wraps */}
-                <div className="receipt-main" style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0, width: '100%' }}>
-                  <div style={{
-                    width: 48, height: 48, borderRadius: 10, flexShrink: 0,
-                    background: CF.navy3, border: `1px solid ${CF.navyLine}`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    <Icon name="receipt" size={20} color={CF.inkMute} />
-                  </div>
-                  <div className="receipt-copy" style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: CF.ink, marginBottom: 1 }}>{r.sub}</div>
-                    <div style={{ fontSize: 11, color: CF.inkDim, whiteSpace: 'normal', overflow: 'visible', textOverflow: 'clip', lineHeight: 1.35 }}>{r.job}</div>
-                    <div style={{ fontSize: 10, color: CF.inkMute, marginTop: 2, fontFamily: "'JetBrains Mono',monospace" }}>{r.date}</div>
-                  </div>
-                </div>
-
-                {/* RIGHT: badges + amount + action — wraps below left group on narrow screens */}
-                <div className="receipt-actions" style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 10, width: '100%' }}>
-                  <div className="receipt-chips-row" style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
-                    <Chip color={catColor[r.cat] || 'mute'}>{r.cat}</Chip>
-                    <Chip color={statusColor[r.status] || 'mute'}>{r.status}</Chip>
-                  </div>
-                  <div className="receipt-amount" style={{
-                    fontFamily: "'JetBrains Mono',monospace", fontSize: 16, fontWeight: 700,
-                    color: CF.ink, minWidth: 76, textAlign: 'left', flexShrink: 0,
-                  }}>{r.amount}</div>
-                  <div style={{ flexShrink: 0 }}>
-                    {isMatched ? (
-                      <span style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 5,
-                        fontSize: 12, fontWeight: 600, color: CF.green,
-                        background: 'rgba(62,230,168,0.08)', border: '1px solid rgba(62,230,168,0.2)',
-                        borderRadius: 9, padding: '7px 12px',
-                      }}>
-                        <Icon name="check" size={12} color={CF.green} /> Matched
-                      </span>
-                    ) : (
-                      <Btn variant="primary" size="sm" onClick={() => setMatched(p => ({ ...p, [r.id]: true }))}>
-                        Match Transaction
-                      </Btn>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        {/* Receipt table — Bootstrap-style responsive */}
+        <div className="table-responsive" style={{ border: `1px solid ${CF.cardBorder}`, borderRadius: 14, background: CF.navy1, boxShadow: 'var(--cf-cardShadow)' }}>
+          <table className="receipt-table">
+            <thead>
+              <tr>
+                <th className="rt-th" style={{ minWidth: 160 }}>Subcontractor</th>
+                <th className="rt-th" style={{ minWidth: 90 }}>Date</th>
+                <th className="rt-th" style={{ minWidth: 100 }}>Category</th>
+                <th className="rt-th rt-right" style={{ minWidth: 80 }}>Amount</th>
+                <th className="rt-th" style={{ minWidth: 70 }}>Status</th>
+                <th className="rt-th" style={{ minWidth: 90 }}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.length === 0 && (
+                <tr><td colSpan={6} className="rt-empty">No receipts in this category.</td></tr>
+              )}
+              {visibleReceipts.map((r, i) => {
+                const isMatched = matched[r.id] || r.status === 'Matched';
+                return (
+                  <tr key={r.id} className="receipt-tr">
+                    <td className="rt-td">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <div className="rt-icon">
+                          <Icon name="receipt" size={14} color={CF.inkMute} />
+                        </div>
+                        <div style={{ minWidth: 0 }}>
+                          <div className="rt-name">{r.sub}</div>
+                          <div className="rt-job">{r.job}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="rt-td rt-date">{r.date}</td>
+                    <td className="rt-td"><Chip color={catColor[r.cat] || 'mute'}>{r.cat}</Chip></td>
+                    <td className="rt-td rt-right rt-amount">{r.amount}</td>
+                    <td className="rt-td"><Chip color={statusColor[r.status] || 'mute'}>{r.status}</Chip></td>
+                    <td className="rt-td">
+                      {isMatched ? (
+                        <span className="rt-matched">
+                          <Icon name="check" size={10} color={CF.green} /> Matched
+                        </span>
+                      ) : (
+                        <Btn variant="primary" size="sm" onClick={() => setMatched(p => ({ ...p, [r.id]: true }))}>
+                          Match
+                        </Btn>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
           {filtered.length > PER_PAGE && (
             <div className="pagination-bar">
               <span className="pagination-meta">
-                Showing {start + 1}-{Math.min(start + PER_PAGE, filtered.length)} of {filtered.length} receipts
+                Showing {start + 1}–{Math.min(start + PER_PAGE, filtered.length)} of {filtered.length} receipts
               </span>
               <div className="pagination-actions">
-                <Btn variant="ghost" size="sm" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Previous</Btn>
-                <Chip color="blue">Page {page} of {totalPages}</Chip>
+                <Btn variant="ghost" size="sm" disabled={page === 1} onClick={() => setPage(p => Math.max(1, p - 1))}>Prev</Btn>
+                <Chip color="blue">{page} / {totalPages}</Chip>
                 <Btn variant="ghost" size="sm" disabled={page === totalPages} onClick={() => setPage(p => Math.min(totalPages, p + 1))}>Next</Btn>
               </div>
             </div>
